@@ -26,7 +26,6 @@ if(!require(spatialsampler)) install_github("spatialsampler")
 if(!require(odkr)) install_github("odkr")
 
 
-
 ################################################################################
 #
 # UI for web application
