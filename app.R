@@ -1,49 +1,82 @@
+################################################################################
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
 #
-# Find out more about building applications with Shiny here:
 #
-#    http://shiny.rstudio.com/
+# This is a Shiny web application to support the implementation of health and
+# nutrition coverage surveys in Liberia
 #
+#
+#
+################################################################################
 
-library(shiny)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+################################################################################
+#
+# Set-up
+#
+################################################################################
+#
+# Load libraries
+#
+if(!require(shiny)) install.packages("shiny")
+if(!require(shinydashboard)) install.packages("shinydashboard")
+if(!require(devtools)) install.packages("devtools")
+if(!require(liberia)) install_github("liberia")
+if(!require(spatialsampler)) install_github("spatialsampler")
+if(!require(odkr)) install_github("odkr")
+
+
+
+################################################################################
+#
+# UI for web application
+#
+################################################################################
+#
+# Define UI for application
+#
+ui <- dashboardPage(
+  skin = "green",
+  #
+  # Header
+  #
+  dashboardHeader(
+    title = "Liberia Coverage Surveys",
+    titleWidth = 300),
+  #
+  # Sidebar
+  #
+  dashboardSidebar(
+    width = 300,
+    sidebarSearchForm(
+      textId = "searchText",
+      buttonId = "searchButton"
+    ),
+    sidebarMenu(
+      id = "tabs",
+      menuItem("Design", tabName = "design"),
+      menuItem("Collect", tabName = "collect"),
+      menuItem("Process", tabName = "process"),
+      menuItem("Analyse", tabName = "analyse"),
+      menuItem("Report", tabName = "report")
+    )
+  ),
+  #
+  # Body
+  #
+  dashboardBody()
 )
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
-}
+
+################################################################################
+#
+# Server logic for web application
+#
+################################################################################
+#
+# Define server logic for application
+#
+server <- function(input, output) {}
 
 # Run the application 
 shinyApp(ui = ui, server = server)
