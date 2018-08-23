@@ -78,7 +78,24 @@ ui <- dashboardPage(
   #
   # Body
   #
-  dashboardBody()
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "design",
+        tabBox(
+          width = 12,
+          title = "Design",
+          selected = "Indicators",
+          tabPanel("Indicators"),
+          tabPanel("Stage 1"),
+          tabPanel("Stage 2")
+        )
+      ),
+      tabItem(
+        tabName = "collect"
+      )
+    )
+  )
 )
 
 
