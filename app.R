@@ -35,7 +35,7 @@ if(!require(odkr)) install_github("odkr")
 # Define UI for application
 #
 ui <- dashboardPage(
-  skin = "green",
+  skin = "red",
   #
   # Header
   #
@@ -53,11 +53,26 @@ ui <- dashboardPage(
     ),
     sidebarMenu(
       id = "tabs",
-      menuItem("Design", tabName = "design"),
-      menuItem("Collect", tabName = "collect"),
-      menuItem("Process", tabName = "process"),
-      menuItem("Analyse", tabName = "analyse"),
-      menuItem("Report", tabName = "report")
+      menuItem(text = "Design", 
+               tabName = "design", 
+               icon = icon(name = "pencil", 
+                           lib = "font-awesome")),
+      menuItem(text = "Collect", 
+               tabName = "collect",
+               icon = icon(name = "tablet",
+                           lib = "font-awesome")),
+      menuItem(text = "Process", 
+               tabName = "process",
+               icon = icon(name = "database",
+                           lib = "font-awesome")),
+      menuItem(text = "Analyse", 
+               tabName = "analyse",
+               icon = icon(name = "line-chart",
+                           lib = "font-awesome")),
+      menuItem(text = "Report", 
+               tabName = "report",
+               icon = icon(name = "file-text",
+                           lib = "font-awesome"))
     )
   ),
   #
