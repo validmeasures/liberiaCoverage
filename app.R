@@ -79,20 +79,65 @@ ui <- dashboardPage(
   # Body
   #
   dashboardBody(
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+    ),
     tabItems(
-      tabItem(
-        tabName = "design",
-        tabBox(
-          width = 12,
+      tabItem(tabName = "design",
+        tabBox(selected = "Indicators",
           title = "Design",
-          selected = "Indicators",
-          tabPanel("Indicators"),
-          tabPanel("Stage 1"),
-          tabPanel("Stage 2")
+          width = 12,
+          height = 600,
+          side = "right",
+          tabPanel(title = "Stage 2"),
+          tabPanel(title = "Stage 1"),
+          tabPanel(title = "Sample size"),
+          tabPanel(title = "Indicators",
+            box(title = "Select indicators",
+              solidHeader = TRUE,
+              status = "danger",
+              width = 4,
+              checkboxGroupInput(inputId = "indicators1",
+                label = "Which indicators are to be assessed?",
+                choices = c("IMAM coverage", "Vitamin A supplementation coverage",
+                            "FeFol supplementation coverage",
+                            "Micronutrient powder supplementation coverage",
+                            "Infant and young child feeding counselling coverage"),
+                selected = NULL)
+            ),
+            box(title = "Description",
+              solidHeader = TRUE,
+              status = "danger",
+              width = 8)
+          )
         )
       ),
-      tabItem(
-        tabName = "collect"
+      tabItem(tabName = "collect",
+        tabBox(selected = "PAPI",
+          title = "Collect",
+          width = 12,
+          side = "right",
+          tabPanel(title = "CAPI"),
+          tabPanel(title = "PAPI")
+        )
+      ),
+      tabItem(tabName = "process",
+        box(title = "Process",
+          solidHeader = FALSE,
+          status = "danger",
+          width = 12)
+      ),
+      tabItem(tabName = "analyse",
+        box(title = "Analyse",
+          solidHeader = FALSE,
+          status = "danger",
+          width = 12)
+      ),
+      tabItem(tabName = "report",
+        box(title = "Report",
+          solidHeader = FALSE,
+          status = "danger",
+          width = 12)
       )
     )
   )
