@@ -3,27 +3,12 @@
 #
 #
 # This is a Shiny web application to support the implementation of health and
-# nutrition coverage surveys in Liberia
+# nutrition coverage surveys in Liberia.
 #
+# This is the code for the user interface (UI) of the Shiny web application.
 #
 #
 ################################################################################
-
-
-################################################################################
-#
-# Set-up
-#
-################################################################################
-#
-# Load libraries
-#
-if(!require(shiny)) install.packages("shiny")
-if(!require(shinydashboard)) install.packages("shinydashboard")
-if(!require(devtools)) install.packages("devtools")
-if(!require(liberia)) install_github("liberia")
-if(!require(spatialsampler)) install_github("spatialsampler")
-if(!require(odkr)) install_github("odkr")
 
 
 ################################################################################
@@ -125,7 +110,17 @@ ui <- dashboardPage(
         box(title = "Process",
           solidHeader = FALSE,
           status = "danger",
-          width = 12)
+          width = 12,
+          box(title = "Input data to process",
+            solidHeader = TRUE,
+            status = "danger",
+            width = 4,
+            radioButtons(inputId = "rawdata1",
+              label = "How will data be inputted?",
+              choices = c("Upload data file", 
+                          "Get data from ODK server"))
+          )
+        )
       ),
       tabItem(tabName = "analyse",
         box(title = "Analyse",
@@ -142,18 +137,3 @@ ui <- dashboardPage(
     )
   )
 )
-
-
-################################################################################
-#
-# Server logic for web application
-#
-################################################################################
-#
-# Define server logic for application
-#
-server <- function(input, output) {}
-
-# Run the application 
-shinyApp(ui = ui, server = server)
-
