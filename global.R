@@ -22,7 +22,10 @@
 if(!require(shiny)) install.packages("shiny")
 if(!require(shinydashboard)) install.packages("shinydashboard")
 if(!require(devtools)) install.packages("devtools")
+if(!require(bbw)) install.packages("bbw")
 if(!require(liberia)) install_github("liberia")
 if(!require(spatialsampler)) install_github("spatialsampler")
 if(!require(odkr)) install_github("odkr")
+if(!require(zscorer)) install_github("zscorer")
+
 
