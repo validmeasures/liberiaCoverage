@@ -1,0 +1,26 @@
+.nav-tabs-custom .nav-tabs li.active:hover a {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.nav-tabs-custom .nav-tabs li.active a {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.nav-tabs-custom .nav-tabs li.active {
+  border-top-color: #dd4b39;
+}
+
+.skin-red .main-header .logo {
+  background-color: #dd4b39;
+}
+
+.skin-red .main-header .logo:hover {
+  background-color: #dd4b39;
+}
+
+/*.tabs-above > .nav > li[class=active] > a {
+           background-color: #dd4b39;
+           color: #dd4b39; */
+           
