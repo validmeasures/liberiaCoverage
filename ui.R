@@ -36,6 +36,9 @@ ui <- dashboardPage(
       textId = "searchText",
       buttonId = "searchButton"
     ),
+    #
+    # Sidebar menu
+    #
     sidebarMenu(
       id = "tabs",
       menuItem(text = "Design", 
@@ -64,10 +67,19 @@ ui <- dashboardPage(
   # Body
   #
   dashboardBody(
+    #
+    # Specify a custom.css
+    #
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
     ),
+    #
+    # Body outputs for every menu item on sidebar
+    #
     tabItems(
+      #
+      # Body output when 'design' menu is selected
+      #
       tabItem(tabName = "design",
         tabBox(selected = "Indicators",
           title = "Design",
@@ -97,6 +109,9 @@ ui <- dashboardPage(
           )
         )
       ),
+      #
+      # Body output when 'collect' menu is selected
+      #
       tabItem(tabName = "collect",
         tabBox(selected = "PAPI",
           title = "Collect",
@@ -106,28 +121,78 @@ ui <- dashboardPage(
           tabPanel(title = "PAPI")
         )
       ),
+      #
+      # Body output when 'process' menu is selected
+      #
       tabItem(tabName = "process",
-        box(title = "Process",
-          solidHeader = FALSE,
-          status = "danger",
+        tabBox(title = "Process",
+          selected = "Input Raw Village Data",
+          #solidHeader = FALSE,
+          #status = "danger",
+          side = "right",
           width = 12,
-          box(title = "Input data to process",
-            solidHeader = TRUE,
-            status = "danger",
-            width = 4,
-            radioButtons(inputId = "rawdata1",
-              label = "How will data be inputted?",
-              choices = c("Upload data file", 
-                          "Get data from ODK server"))
-          )
+          height = 600,
+          tabPanel(title = "Input Raw Coverage Data",
+            box(title = "Input data to process",
+              solidHeader = TRUE,
+              status = "danger",
+              width = 4,
+              radioButtons(inputId = "inputDataType",
+                label = "How will data be inputted?",
+                choices = c("Upload data file" = "upload", 
+                            "Get data from ODK server" = "odk")),
+              br(),
+              conditionalPanel(condition = "input.inputDataType == 'upload'",
+                fileInput(inputId = "inputDataRaw",
+                  label = "Upload raw data to process",
+                  accept = c("text/csv",
+                             "text/comma-separated-values,text/plain",
+                             ".csv"))
+              ),
+              conditionalPanel(condition = "input.inputDataType == 'odk'",
+                radioButtons(inputId = "inputOdkType",
+                  label = "Pull data from ODK remote or local?",
+                  choices = c(Remote = "remote", Local = "local")),
+                br(),
+                conditionalPanel(condition = "input.inputOdkType == 'remote'",
+                  textInput(inputId = "inputOdkUrl",
+                    label = "Remote URL",
+                    placeholder = "https://odk.ona.io"),
+                  textInput(inputId = "inputOdkUsername",
+                    label = "Username"),
+                  textInput(inputId = "inputOdkPassword",
+                    label = "Password"),
+                  textInput(inputId = "inputOdkFormId",
+                    label = "Form ID")
+                ),
+                conditionalPanel(condition = "input.inputOdkType == 'local'",
+                  textInput(inputId = "inputOdkDirectory",
+                    label = "Where is the local ODK directory located?",
+                    value = getwd()),
+                  textInput(inputId = "inputOdkFormId",
+                    label = "Form ID")
+                )
+              )
+            ),
+            box(title = "Input Raw coverage data",
+              solidHeader = TRUE,
+              status = "danger",
+              width = 8)),
+          tabPanel(title = "Input Raw Village Data")
         )
       ),
+      #
+      # Body output when 'analyse' menu is selected
+      #
       tabItem(tabName = "analyse",
         box(title = "Analyse",
           solidHeader = FALSE,
           status = "danger",
           width = 12)
       ),
+      #
+      # Body output when 'report' menu is selected
+      #
       tabItem(tabName = "report",
         box(title = "Report",
           solidHeader = FALSE,
