@@ -130,7 +130,6 @@ ui <- dashboardPage(
             solidHeader = TRUE,
             status = "danger",
             width = 4,
-            shinyjs::useShinyjs(),            
             selectInput(inputId = "zValue",
               label = "Confidence interval",
               choices = list("96% CI ( z-value: 2.05 )" = "2.05",
@@ -183,6 +182,7 @@ ui <- dashboardPage(
                 label = "No. of samples per cluster planned for survey",
                 min = 0, max = 30, step = 1, value = 10)
             ),
+            br(),
             actionButton(inputId = "calcSampSize",
               label = "Calculate",
               icon = icon(name = "calculator", 
@@ -201,7 +201,13 @@ ui <- dashboardPage(
             status = "danger",
             width = 8,
             withMathJax(),
-            uiOutput("sampSizeCalculations")
+            uiOutput("sampSizeCalculations"),
+            hr(),
+            shinyjs::useShinyjs(),
+            conditionalPanel(condition = "input.calcSampSize != 0",
+              h4(textOutput("sampSizeHeader"))
+            ),
+            tableOutput("sampSizeResults")
           )
         ),
         hr(),
