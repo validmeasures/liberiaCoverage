@@ -188,7 +188,7 @@ server <- function(input, output, session) {
                      "Sample size"),
       Value = as.character(c(paste(input$zValue, " (", ci, ")", sep = "") , 
               paste(input$sampSizeProp * 100, "%", sep = ""),
-              paste("±", input$sampSizePrec, "%", sep = ""),
+              paste("±", input$sampSizePrec * 100, "%", sep = ""),
               paste(input$inputDeffClusterSize, "samples per cluster", sep = " "),
               ifelse(is.null(input$inputDeffFile), 
                      "No data", 
@@ -210,6 +210,16 @@ server <- function(input, output, session) {
     output$sampSizeResults <- renderTable({
       ssResults
     })
+    #
+    # Value box - sample size parameters
+    #
+    output$sampSizeParamsBox <- renderInfoBox({
+      infoBox(
+        value = ssResults$Value[1],
+        title = ssResults$Parameters[1],
+        icon = icon(name = "list"),
+        color = "green", width = 8, fill = TRUE)
+    })
   })
   #
   # Reset parameters
@@ -217,6 +227,8 @@ server <- function(input, output, session) {
   observeEvent(input$calcSampSizeReset, {
     output$sampSizeHeader <- renderText({NULL})
     output$sampSizeResults <- renderTable({NULL})
-    shinyjs::reset("Sample size parameters")
+    #shinyjs::reset("Sample size parameters")
+    #output$sampSizeParamsBox <- NULL
+    shinyjs::reset("Sample size calculations")
   })
 }
