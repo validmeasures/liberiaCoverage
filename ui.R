@@ -217,10 +217,22 @@ ui <- dashboardPage(
         ),
         hr(),
         fluidRow(
-          box(title = "Stage 1 Sampling",
+          box(title = "Stage 1 sampling parameters",
             solidHeader = TRUE,
             status = "danger",
-            width = 12)
+            width = 4,
+            selectInput(inputId = "mapSamplingArea",
+              label = "Select counties and/or districts to sample",
+              choices = list("Counties" = counties$admin1name,
+                             "Districts" = districts$admin2Name),
+              multiple = TRUE)
+          ),
+          box(title = "Stage 1 sample",
+            solidHeader = TRUE,
+            status = "danger",
+            width = 8,
+            leafletOutput("mapSampling", height = 600)
+          )
         )
       ),
       #
