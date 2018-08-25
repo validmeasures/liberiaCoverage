@@ -27,5 +27,6 @@ if(!require(liberia)) install_github("liberia")
 if(!require(spatialsampler)) install_github("spatialsampler")
 if(!require(odkr)) install_github("odkr")
 if(!require(zscorer)) install_github("zscorer")
+if(!require(sampsizer)) install_github("sampsizer")
 
 
