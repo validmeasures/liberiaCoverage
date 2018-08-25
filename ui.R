@@ -207,7 +207,12 @@ ui <- dashboardPage(
             conditionalPanel(condition = "input.calcSampSize != 0",
               h4(textOutput("sampSizeHeader"))
             ),
-            tableOutput("sampSizeResults")
+            valueBoxOutput("confIntBox"),
+            valueBoxOutput("precisionBox"),
+            valueBoxOutput("clusterSizeBox"),
+            valueBoxOutput("iccBox"),
+            valueBoxOutput("deffBox"),
+            valueBoxOutput("sampSizeBox")
           )
         ),
         hr(),
