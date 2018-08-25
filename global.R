@@ -28,6 +28,8 @@ if(!require(maptools)) install.package("maptools")
 if(!require(rgdal)) install.packages("rgdal")
 if(!require(rgeos)) install.packages("rgeos")
 if(!require(raster)) install.packages("raster")
+if(!require(leaflet)) install.packages("leaflet")
+if(!require(ggmap)) install.packages("ggmap")
 
 if(!require(liberia)) install_github("liberia")
 if(!require(spatialsampler)) install_github("spatialsampler")
