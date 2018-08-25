@@ -85,7 +85,8 @@ ui <- dashboardPage(
       # Body output when 'design' menu is selected
       #
       tabItem(tabName = "design",
-        h3("Design"),
+        h2("Design"),
+        hr(),
         fluidRow(
           box(title = "Indicators",
             solidHeader = TRUE,
@@ -123,6 +124,7 @@ ui <- dashboardPage(
               uiOutput("descriptionImam"))
           )
         ),
+        hr(),
         fluidRow(
           box(title = "Sample size parameters",
             solidHeader = TRUE,
@@ -137,10 +139,14 @@ ui <- dashboardPage(
               selected = "1.96"),
             sliderInput(inputId = "sampSizeProp",
               label = "Proportion/prevalence (p)",
-              min = 0, max = 100, value = 50, step = 1),
+              min = 0, max = 1, value = 0.50, step = 0.01),
             sliderInput(inputId = "sampSizePrec",
               label = "Level of precision (c)",
-              min = 3, max = 15, value = 10),
+              min = 0.03, max = 0.15, value = 0.10, step = 0.01),
+            hr(),
+            checkboxInput(inputId = "sampSizeFpc",
+              label = "Apply finite population correction",
+              value = FALSE),
             hr(),
             radioButtons(inputId = "inputDeffType",
               label = "Specify/calculate design effect (DEFF)",
@@ -171,17 +177,15 @@ ui <- dashboardPage(
                 min = 0, max = 30, step = 1, value = 10)
             )
           ),
-          tabBox(selected = "IMAM",
-            title = "Sample size",
+          box(title = "Sample size calculations",
+            solidHeader = TRUE,
+            status = "danger",
             width = 8,
-            side = "right",
-            tabPanel(title = "IYCF"),
-            tabPanel(title = "MNP"),
-            tabPanel(title = "FeFol"),
-            tabPanel(title = "Vitamin A"),
-            tabPanel(title = "IMAM")
+            withMathJax(),
+            uiOutput("sampSizeCalculations")
           )
         ),
+        hr(),
         fluidRow(
           box(title = "Stage 1 Sampling",
             solidHeader = TRUE,
