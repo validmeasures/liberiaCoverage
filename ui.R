@@ -43,23 +43,28 @@ ui <- dashboardPage(
       menuItem(text = "Design", 
         tabName = "design", 
         icon = icon(name = "pencil", 
-                    lib = "font-awesome")),
+                    lib = "font-awesome",
+                    class = "fa-lg")),
       menuItem(text = "Collect", 
         tabName = "collect",
         icon = icon(name = "tablet",
-                    lib = "font-awesome")),
+                    lib = "font-awesome",
+                    class = "fa-lg")),
       menuItem(text = "Process", 
         tabName = "process",
         icon = icon(name = "database",
-                    lib = "font-awesome")),
+                    lib = "font-awesome",
+                    class = "fa-lg")),
       menuItem(text = "Analyse", 
         tabName = "analyse",
         icon = icon(name = "line-chart",
-                    lib = "font-awesome")),
+                    lib = "font-awesome",
+                    class = "fa-lg")),
       menuItem(text = "Report", 
         tabName = "report",
         icon = icon(name = "file-text",
-                    lib = "font-awesome"))
+                    lib = "font-awesome",
+                    class = "fa-lg"))
     )
   ),
   #
@@ -173,7 +178,9 @@ ui <- dashboardPage(
                 br(),
                 actionButton(inputId = "inputProcessAction",
                   label = "Process",
-                  icon = icon(name = "database", lib = "font-awesome"))
+                  icon = icon(name = "database", 
+                              lib = "font-awesome",
+                              class = "fa-lg"))
               )
             )
           ),
@@ -195,9 +202,11 @@ ui <- dashboardPage(
                   accept = c("text/csv",
                              "text/comma-separated-values,text/plain",
                              ".csv")),
-                  actionButton(inputId = "inputOdkAction2",
+                  actionButton(inputId = "inputDataAction2",
                     label = "Upload data",
-                    icon = icon(name = "upload", lib = "font-awesome"))
+                    icon = icon(name = "upload", 
+                                lib = "font-awesome",
+                                class = "fa-lg"))
                 ),
                 conditionalPanel(condition = "input.inputDataType2 == 'odk'",
                   radioButtons(inputId = "inputOdkData2",
@@ -223,13 +232,15 @@ ui <- dashboardPage(
                       label = "Form ID")
                   ),
                   conditionalPanel(condition = "input.inputOdkFormId2 == ' '",
-                    actionButton(inputId = "inputOdkAction2",
+                    actionButton(inputId = "inputDataAction2",
                       label = "Pull data",
-                      icon = icon(name = "arrow-down", lib = "font-awesome"))
+                      icon = icon(name = "arrow-down",
+                                  lib = "font-awesome", 
+                                  class = "fa-lg"))
                   )
                 )
               ),
-              conditionalPanel(condition = "input.inputOdkAction2 > 0",
+              conditionalPanel(condition = "input.inputDataAction2 > 0",
                 box(title = "Raw Coverage Data",
                   solidHeader = TRUE,
                   status = "danger",
@@ -254,9 +265,11 @@ ui <- dashboardPage(
                     accept = c("text/csv",
                                "text/comma-separated-values,text/plain",
                                ".csv")),
-                  actionButton(inputId = "inputOdkAction1",
+                  actionButton(inputId = "inputDataAction1",
                     label = "Upload data",
-                    icon = icon(name = "upload", lib = "font-awesome"))
+                    icon = icon(name = "upload", 
+                                lib = "font-awesome",
+                                class = "fa-lg"))
                 ),
                 conditionalPanel(condition = "input.inputDataType1 == 'odk'",
                   radioButtons(inputId = "inputOdkData1",
@@ -282,13 +295,15 @@ ui <- dashboardPage(
                       label = "Form ID")
                   ),
                   conditionalPanel(condition = "input.inputOdkFormId1 == ' '",
-                    actionButton(inputId = "inputOdkAction1",
+                    actionButton(inputId = "inputDataAction1",
                       label = "Pull data",
-                      icon = icon(name = "arrow-down", lib = "font-awesome"))
+                      icon = icon(name = "arrow-down", 
+                                  lib = "font-awesome",
+                                  class = "fa-lg"))
                   )
                 )
               ),
-              conditionalPanel(condition = "input.inputOdkAction1 > 0",
+              conditionalPanel(condition = "input.inpuDataAction1 > 0",
                 box(title = "Raw Village Data",
                   solidHeader = TRUE,
                   status = "danger",
@@ -333,7 +348,9 @@ ui <- dashboardPage(
               br(),
               actionButton(inputId = "analysisAction",
                 label = "Analyse",
-                icon = icon(name = "line-chart", lib = "font-awesome"))
+                icon = icon(name = "line-chart", 
+                            lib = "font-awesome",
+                            class = "fa-lg"))
             )
           )
         )
