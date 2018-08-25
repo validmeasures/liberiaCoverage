@@ -19,7 +19,7 @@
 #
 # Define server logic for application
 #
-server <- function(input, output) {
+server <- function(input, output, session) {
   output$descriptionImam <- renderUI({
     HTML("
       <p>IMAM coverage usually pertains to coverage of SAM treatment. IMAM coverage has two indicators:</p>
@@ -122,5 +122,101 @@ server <- function(input, output) {
          
          <p>The sample size required will also depend on the indicators being assessed. Following is a further discussion of sample size requirements for the CMAM coverage survey and for the survey for children 6-59 months and their mothers.</p>
       ")
+  })
+  ##############################################################################
+  #
+  # Sample size
+  #
+  ##############################################################################
+  #
+  # Read uploaded data for design effect calculations
+  #
+  deffDf <- reactive({
+    inputDeffFile <- input$inputDeffFile
+    if(is.null(inputDeffFile)) return(NULL)
+    read.csv(file = inputDeffFile$datapath, header = TRUE, sep = ",")
+  }) 
+  #
+  # Update selectInput for indicator and cluster variable
+  #
+  observe({
+    updateSelectInput(session = session,
+      inputId = "inputDeffVar",
+      label = "Select variable name of indicator to test",
+      choices = names(deffDf()))
+    updateSelectInput(session = session,
+      inputId = "inputDeffCluster",
+      label = "Select variable name of survey cluster",
+      choices = names(deffDf()))
+  })
+  #
+  #
+  #
+  observeEvent(input$calcSampSize, {
+    #
+    # Calculate deff
+    #
+    if(!is.null(input$inputDeffFile)) {
+      icc <- get_icc(x = deffDf()[[input$inputDeffVar]], 
+                     cluster = deffDf()[[input$inputDeffCluster]])[["rho"]]
+      designEffect <- 1 + (input$inputDeffClusterSize - 1) * icc
+    }
+    ci <- ifelse(input$zValue == "1.96", "95% CI",
+            ifelse(input$zValue == "1.75", "92% CI",
+              ifelse(input$zValue == "1.645", "90% CI", "96% CI")))
+    #
+    # Calculate sample size
+    #
+    ss <- get_ss_prevalence(z = as.numeric(input$zValue),
+                            p = input$sampSizeProp,
+                            c = input$sampSizePrec,
+                            deff = ifelse(input$inputDeffType == "specify", 
+                                          input$inputDeffValue, 
+                                          designEffect),
+                            fpc = input$sampSizeFpc,
+                            pop = if(input$sampSizeFpc) input$sampSizeFpcPop)
+    #    
+    # Compose data frame
+    #
+    ssResults <- data.frame(
+      Parameters = c("z-value", 
+                     "Prevalence",
+                     "Precision",
+                     "Cluster size",
+                     "ICC",
+                     "Design effect of planned survey",
+                     "Sample size"),
+      Value = as.character(c(paste(input$zValue, " (", ci, ")", sep = "") , 
+              paste(input$sampSizeProp * 100, "%", sep = ""),
+              paste("±", input$sampSizePrec, "%", sep = ""),
+              paste(input$inputDeffClusterSize, "samples per cluster", sep = " "),
+              ifelse(is.null(input$inputDeffFile), 
+                     "No data", 
+                      round(icc, digits = 4)), 
+              ifelse(is.null(input$inputDeffFile), 
+                     paste(input$inputDeffValue, "(assumed)", sep = " "), 
+                     paste(round(designEffect, digits = 4), "(based on data)", sep = " ")),
+              ceiling(ss))),
+      stringsAsFactors = FALSE)      
+    #
+    # Header for calculation results
+    #
+    output$sampSizeHeader <- renderText({
+      "Sample size parameters and estimate"
+    })
+    #
+    # Table for sample size calculation results
+    #
+    output$sampSizeResults <- renderTable({
+      ssResults
+    })
+  })
+  #
+  # Reset parameters
+  #
+  observeEvent(input$calcSampSizeReset, {
+    output$sampSizeHeader <- renderText({NULL})
+    output$sampSizeResults <- renderTable({NULL})
+    shinyjs::reset("Sample size parameters")
   })
 }
