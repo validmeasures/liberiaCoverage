@@ -179,24 +179,30 @@ server <- function(input, output, session) {
     # Compose data frame
     #
     ssResults <- data.frame(
-      Parameters = c("z-value", 
+      Parameters = c("z-value",
+                     "Confidence interval",
                      "Prevalence",
                      "Precision",
-                     "Cluster size",
+                     "Cluster size (samples per cluster)",
                      "ICC",
-                     "Design effect of planned survey",
+                     ifelse(input$inputDeffType == "specify", 
+                            "DEFF (assumed)", 
+                            "DEFF (calculated)"),
                      "Sample size"),
-      Value = as.character(c(paste(input$zValue, " (", ci, ")", sep = "") , 
-              paste(input$sampSizeProp * 100, "%", sep = ""),
-              paste("±", input$sampSizePrec * 100, "%", sep = ""),
-              paste(input$inputDeffClusterSize, "samples per cluster", sep = " "),
-              ifelse(is.null(input$inputDeffFile), 
-                     "No data", 
-                      round(icc, digits = 4)), 
-              ifelse(is.null(input$inputDeffFile), 
-                     paste(input$inputDeffValue, "(assumed)", sep = " "), 
-                     paste(round(designEffect, digits = 4), "(based on data)", sep = " ")),
-              ceiling(ss))),
+      Value = as.character(
+                c(input$zValue,
+                  ci,
+                  paste(input$sampSizeProp * 100, "%", sep = ""),
+                  paste("±", input$sampSizePrec * 100, "%", sep = ""),
+                  ifelse(is.null(input$inputDeffFile),
+                         "NA", input$inputDeffClusterSize),
+                  ifelse(is.null(input$inputDeffFile), 
+                         "No data", 
+                         round(icc, digits = 4)), 
+                  ifelse(is.null(input$inputDeffFile), 
+                         input$inputDeffValue, 
+                         designEffect),
+                  ceiling(ss))),
       stringsAsFactors = FALSE)      
     #
     # Header for calculation results
@@ -211,14 +217,76 @@ server <- function(input, output, session) {
       ssResults
     })
     #
+    # Value box - CI
+    #
+    output$confIntBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[2],
+        subtitle = "Confidence interval",
+        icon = icon(name = "balance-scale", 
+                    lib = "font-awesome", 
+                    class = "fa-md"),
+        color = "teal", width = 4)
+    })
+    #
+    # Value box - precision
+    #
+    output$precisionBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[4],
+        subtitle = "Precision",
+        icon = icon(name = "check", 
+                    lib = "font-awesome", 
+                    class = "fa-lg"),
+        color = "blue", width = 4)
+    })
+    #
+    # Value box - cluster size
+    #
+    output$clusterSizeBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[5],
+        subtitle = "Cluster size",
+        icon = icon(name = "sort-numeric-asc", 
+                    lib = "font-awesome", 
+                    class = "fa-md"),
+        color = "olive", width = 4)
+    })
+    #
+    # Value box - sample size CI
+    #
+    output$iccBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[6],
+        subtitle = "ICC",
+        icon = icon(name = "link", 
+                    lib = "font-awesome", 
+                    class = "fa-lg"),
+        color = "orange", width = 4)
+    })
+    #
     # Value box - sample size parameters
     #
-    output$sampSizeParamsBox <- renderInfoBox({
-      infoBox(
-        value = ssResults$Value[1],
-        title = ssResults$Parameters[1],
-        icon = icon(name = "list"),
-        color = "green", width = 8, fill = TRUE)
+    output$deffBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[7],
+        subtitle = ssResults$Parameters[7],
+        icon = icon(name = "cog", 
+                    lib = "font-awesome", 
+                    class = "fa-lg"),
+        color = "aqua", width = 4)
+    })
+    #
+    # Value box - sample size
+    #
+    output$sampSizeBox <- renderValueBox({
+      valueBox(
+        value = ssResults$Value[8],
+        subtitle = "Sample size",
+        icon = icon(name = "user", 
+                    lib = "font-awesome", 
+                    class = "fa-lg"),
+        color = "maroon", width = 4)
     })
   })
   #
@@ -227,8 +295,12 @@ server <- function(input, output, session) {
   observeEvent(input$calcSampSizeReset, {
     output$sampSizeHeader <- renderText({NULL})
     output$sampSizeResults <- renderTable({NULL})
-    #shinyjs::reset("Sample size parameters")
-    #output$sampSizeParamsBox <- NULL
+    output$sampSizeBox <- NULL
+    output$iccBox <- NULL
+    output$deffBox <- NULL
+    output$confIntBox <- NULL
+    output$precisionBox <- NULL
+    output$clusterSizeBox <- NULL
     shinyjs::reset("Sample size calculations")
   })
 }
