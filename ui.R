@@ -130,6 +130,7 @@ ui <- dashboardPage(
             solidHeader = TRUE,
             status = "danger",
             width = 4,
+            shinyjs::useShinyjs(),            
             selectInput(inputId = "zValue",
               label = "Confidence interval",
               choices = list("96% CI ( z-value: 2.05 )" = "2.05",
@@ -147,6 +148,12 @@ ui <- dashboardPage(
             checkboxInput(inputId = "sampSizeFpc",
               label = "Apply finite population correction",
               value = FALSE),
+            conditionalPanel(condition = "input.sampSizeFpc",
+              numericInput(inputId = "sampSizeFpcPop",
+                label = "Population size",
+                value = 10000,
+                min = 1, max = 100000, step = 1)
+            ),
             hr(),
             radioButtons(inputId = "inputDeffType",
               label = "Specify/calculate design effect (DEFF)",
@@ -175,6 +182,18 @@ ui <- dashboardPage(
               sliderInput(inputId = "inputDeffClusterSize",
                 label = "No. of samples per cluster planned for survey",
                 min = 0, max = 30, step = 1, value = 10)
+            ),
+            actionButton(inputId = "calcSampSize",
+              label = "Calculate",
+              icon = icon(name = "calculator", 
+                          lib = "font-awesome", 
+                          class = "fa-lg")
+            ),
+            actionButton(inputId = "calcSampSizeReset",
+              label = "Reset",
+              icon = icon(name = "refresh",
+                          lib = "font-awesome",
+                          class = "fa-lg")
             )
           ),
           box(title = "Sample size calculations",
