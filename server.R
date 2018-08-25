@@ -303,4 +303,19 @@ server <- function(input, output, session) {
     output$clusterSizeBox <- NULL
     shinyjs::reset("Sample size calculations")
   })
+  ##############################################################################
+  #
+  # Spatial sampling
+  #
+  ##############################################################################
+  #
+  # Base map
+  #
+  output$mapSampling <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$Esri.NatGeoWorldMap) %>%      
+      setView(lng = geocode(location = "Liberia")[1], 
+              lat = geocode(location = "Liberia")[2], 
+              zoom = 7)
+  })
 }
