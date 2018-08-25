@@ -155,6 +155,12 @@ ui <- dashboardPage(
             tabPanel(title = "Vitamin A"),
             tabPanel(title = "IMAM")
           )
+        ),
+        fluidRow(
+          box(title = "Stage 1 Sampling",
+            solidHeader = TRUE,
+            status = "danger",
+            width = 12)
         )
       ),
       #
