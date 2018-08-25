@@ -96,4 +96,31 @@ server <- function(input, output) {
         <li>Attendance to IYCF counselling</li>
       ")
   })
+  output$sampSizeCalculations <- renderUI({
+    HTML("
+         <p>In general, the sample size needed for proportion-type indicators such as coverage indicators can be calculated using the following equation.</p>
+
+         $$\\begin{aligned}
+         n & ~ = ~ Z^2 ~ \\times ~ \\frac{p(1 ~ - ~ p)}{c ^ 2} \\\\
+         \\\\
+         where: & \\\\
+         \\\\
+         Z & ~ = ~ \\text{z-value for preferred confidence interval} \\\\
+         p & ~ = ~ \\text{expected indicator proportion/prevalence} \\\\
+         c & ~ = ~ \\text{level of precision}
+         \\end{aligned}$$
+         
+         <p>The <strong><i>Z-value</i></strong> is usually <strong><i>1.96</i></strong> for a <strong><i>95% confidence interval</i></strong>. The <strong><i>p</i></strong> should usually be based on previous coverage results if available. If not, it is usually appropriate to set <strong><i>p</i></strong> at <strong><i>50% (0.5)</i></strong> as this results in the highest sample size estimate. The <strong><i>precision (c)</i></strong> for coverage surveys is usually set at <strong><i>±10%</i></strong> based on standard precision used for immunisation coverage.</p>
+         
+         <p>Using these values, the typical sample size needed for coverage surveys is about <strong><i>96</i></strong>.</p>
+         
+         $$ n ~ = ~ 1.96^2 ~ \\times ~ \\frac{0.5(1 ~ - ~ 0.5)}{0.10 ^ 2} ~ \\approx ~  96 $$
+         
+         <p>However, the survey design needs to be taken into account. A cluster survey such as the one that is proposed for the Liberia S3M will need to inflate sample sizes to account for the loss of variance due to the cluster design. This inflation factor is called the <strong><i>design effect (DEFF)</i></strong> which is based on the <strong><i>intracluster correlation coefficient (ICC)</i></strong>.</p>
+         
+         <p>Generally, a <strong><i>DEFF</i></strong> of <strong><i>2</i></strong> is used to multiply the sample size with to account for the loss of variance. This would mean that a sample size of <strong><i>192</i></strong> would be the target sample size. The <strong><i>DEFF</i></strong> can be calculated using previous cluster survey data that assesses the same indicators. If this dataset is available, it can be uploaded and corresponding variables for the indicator and cluster can be specified to estimate <strong><i>DEFF</i></strong> to use.</p>
+         
+         <p>The sample size required will also depend on the indicators being assessed. Following is a further discussion of sample size requirements for the CMAM coverage survey and for the survey for children 6-59 months and their mothers.</p>
+      ")
+  })
 }
