@@ -278,7 +278,7 @@ ui <- dashboardPage(
               ),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'country'",
                 actionButton(inputId = "mapSamplingPlotCountry",
-                  label = "Plot",
+                  label = "Sample",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
@@ -292,7 +292,7 @@ ui <- dashboardPage(
               ),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'county'",
                 actionButton(inputId = "mapSamplingPlotCounty",
-                  label = "Plot",
+                  label = "Sample",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
@@ -306,7 +306,7 @@ ui <- dashboardPage(
               ),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'district'",
                 actionButton(inputId = "mapSamplingPlotDistrict",
-                  label = "Plot",
+                  label = "Sample",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
@@ -317,24 +317,6 @@ ui <- dashboardPage(
                               lib = "font-awesome",
                               class = "fa-lg")
                 )
-              ),
-              hr(),
-              h5("Spatial sample plot settings"),
-              uiOutput("mapSamplingPointPlot"),
-              uiOutput("mapSamplingGridPlot"),
-              uiOutput("mapSettlementsPlot"),
-              br(),
-              actionButton(inputId = "mapSample",
-                label = "Sample",
-                icon = icon(name = "th",
-                            lib = "font-awesome",
-                            class = "fa-lg")
-              ),
-              actionButton(inputId = "mapSampleReset",
-                label = "Reset",
-                icon = icon(name = "refresh",
-                            lib = "font-awesome",
-                            class = "fa-lg")
               )
             )
           ),
