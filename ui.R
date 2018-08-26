@@ -323,7 +323,19 @@ ui <- dashboardPage(
               uiOutput("mapSamplingPointPlot"),
               uiOutput("mapSamplingGridPlot"),
               uiOutput("mapSettlementsPlot"),
-              br()
+              br(),
+              actionButton(inputId = "mapSample",
+                label = "Sample",
+                icon = icon(name = "th",
+                            lib = "font-awesome",
+                            class = "fa-lg")
+              ),
+              actionButton(inputId = "mapSampleReset",
+                label = "Reset",
+                icon = icon(name = "refresh",
+                            lib = "font-awesome",
+                            class = "fa-lg")
+              )
             )
           ),
           box(title = "Stage 1 sample",
