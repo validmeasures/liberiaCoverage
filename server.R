@@ -202,7 +202,7 @@ server <- function(input, output, session) {
                   ifelse(is.null(input$inputDeffFile), 
                          input$inputDeffValue, 
                          designEffect),
-                  ceiling(ss))),
+                  round(ss))),
       stringsAsFactors = FALSE)      
     #
     # Header for calculation results
@@ -317,5 +317,199 @@ server <- function(input, output, session) {
       setView(lng = geocode(location = "Liberia")[1], 
               lat = geocode(location = "Liberia")[2], 
               zoom = 7)
+  })
+  #
+  #
+  #
+  mapCountry <- reactive({ 
+    if(input$mapSamplingAreaType == "country") counties 
+  })
+  mapCounty <- reactive({
+    if(input$mapSamplingAreaType == "county" & input$mapSamplingCounty != "") {
+      counties[counties$admin1name == input$mapSamplingCounty, ]
+    }
+  })
+  mapDistrict <- reactive({
+    if(input$mapSamplingAreaType == "district" & input$mapSamplingDistrict != "") {
+      districts[districts$admin2Name == input$mapSamplingDistrict, ]
+    }
+  })
+  #
+  #
+  #
+  observeEvent(input$mapSamplingAreaType, {
+    leafletProxy("mapSampling") %>%
+      clearShapes()
+  })
+  #
+  # Country borders
+  #
+  observeEvent(mapCountry(), {
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      fitBounds(lng1 = bbox(mapCountry())[1,1], 
+                lat1 = bbox(mapCountry())[2,1], 
+                lng2 = bbox(mapCountry())[1,2], 
+                lat2 = bbox(mapCountry())[2,2]) %>%
+      addPolygons(data = mapCountry(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE)
+  })
+  #
+  # County borders
+  #
+  observeEvent(mapCounty(), {
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      fitBounds(lng1 = bbox(mapCounty())[1,1], 
+                lat1 = bbox(mapCounty())[2,1], 
+                lng2 = bbox(mapCounty())[1,2], 
+                lat2 = bbox(mapCounty())[2,2]) %>%
+      addPolygons(data = mapCounty(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE)
+  })
+  #
+  # District borders
+  #
+  observeEvent(mapDistrict(), {
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      fitBounds(lng1 = bbox(mapDistrict())[1,1], 
+                lat1 = bbox(mapDistrict())[2,1], 
+                lng2 = bbox(mapDistrict())[1,2], 
+                lat2 = bbox(mapDistrict())[2,2]) %>%
+      addPolygons(data = mapDistrict(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE)
+  })
+  #
+  # Plot country sampling grid
+  #
+  observeEvent(input$mapSamplingGridPlotCountry, {
+    if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "area") {
+      mapSamplingPoint <- create_sp_grid(x = mapCountry(),
+                                         area = input$mapSamplingGridArea,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "n") {
+      mapSamplingPoint <- create_sp_grid(x = mapCountry(),
+                                         n = input$mapSamplingGridNumber,
+                                         country = "Liberia",
+                                         buffer = 2,
+                                         n.factor = 5,
+                                         fixed = TRUE)
+    }
+    if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "d") {
+      mapSamplingPoint <- create_sp_grid(x = mapCountry(),
+                                         d = input$mapSamplingGridDist,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    #
+    # Convert to hexagonal SpatialPolygons
+    #
+    mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    #
+    # Plot grids
+    #
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      addPolygons(data = mapCountry(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE) %>%
+      addPolygons(data = mapSamplingGrid,
+                  color = "blue",
+                  weight = 4,
+                  fill = FALSE)
+  })
+  #
+  # Plot county sampling grid
+  #
+  observeEvent(input$mapSamplingGridPlotCounty, {
+    if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "area") {
+      mapSamplingPoint <- create_sp_grid(x = mapCounty(),
+                                         area = input$mapSamplingGridArea,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "n") {
+      mapSamplingPoint <- create_sp_grid(x = mapCounty(),
+                                         n = input$mapSamplingGridNumber,
+                                         country = "Liberia",
+                                         buffer = 2,
+                                         n.factor = 5,
+                                         fixed = TRUE)
+    }
+    if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "d") {
+      mapSamplingPoint <- create_sp_grid(x = mapCounty(),
+                                         d = input$mapSamplingGridDist,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    #
+    # Convert to hexagonal SpatialPolygons
+    #
+    mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    #
+    # Plot grids
+    #
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      addPolygons(data = mapCounty(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE) %>%
+      addPolygons(data = mapSamplingGrid,
+                  color = "blue",
+                  weight = 4,
+                  fill = FALSE)
+  })
+  #
+  # Plot district sampling grid
+  #
+  observeEvent(input$mapSamplingGridPlotDistrict, {
+    if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "area") {
+      mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
+                                         area = input$mapSamplingGridArea,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "n") {
+      mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
+                                         n = input$mapSamplingGridNumber,
+                                         country = "Liberia",
+                                         buffer = 2,
+                                         n.factor = 5,
+                                         fixed = TRUE)
+    }
+    if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "d") {
+      mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
+                                         d = input$mapSamplingGridDist,
+                                         country = "Liberia",
+                                         buffer = 2)
+    }
+    #
+    # Convert to hexagonal SpatialPolygons
+    #
+    mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    #
+    # Plot grids
+    #
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      addPolygons(data = mapDistrict(),
+                  color = "yellow",
+                  weight = 6,
+                  fill = FALSE) %>%
+      addPolygons(data = mapSamplingGrid,
+                  color = "blue",
+                  weight = 4,
+                  fill = FALSE)
   })
 }
