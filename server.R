@@ -319,7 +319,7 @@ server <- function(input, output, session) {
               zoom = 7)
   })
   #
-  #
+  # Create area map objects
   #
   mapCountry <- reactive({ 
     if(input$mapSamplingAreaType == "country") counties 
@@ -335,11 +335,23 @@ server <- function(input, output, session) {
     }
   })
   #
-  #
+  # Reset map when area type is changed
   #
   observeEvent(input$mapSamplingAreaType, {
     leafletProxy("mapSampling") %>%
       clearShapes()
+    updateSelectInput(session = session,
+      inputId = "mapSamplingCounty",
+      label = "Select counties to sample",
+      choices = list("Select county" = "",
+                     "Counties" = counties$admin1name),
+      selected = NULL)
+    updateSelectInput(session = session,
+      inputId = "mapSamplingDistrict",
+      label = "Select districts to sample",
+      choices = list("Select district" = "",
+                     "Districts" = districts$admin2Name),
+      selected = NULL)
   })
   #
   # Country borders
@@ -387,14 +399,43 @@ server <- function(input, output, session) {
                   fill = FALSE)
   })
   #
-  # Plot country sampling grid
+  # Create UI for choosing to plot sampling points
   #
-  observeEvent(input$mapSamplingGridPlotCountry, {
+  output$mapSamplingPointPlot <- renderUI({
+    checkboxInput(inputId = "mapSamplingPointPlot",
+                  label = "Plot sampling points",
+                  value = FALSE)
+  })
+  #
+  # Create UI for choosing to plot sampling grids
+  #
+  output$mapSamplingGridPlot <- renderUI({
+    checkboxInput(inputId = "mapSamplingGridPlot",
+                  label = "Plot sampling grid",
+                  value = FALSE)
+  })
+  #
+  # Create UI for choosing to plot settlements/EAs
+  #
+  output$mapSettlementsPlot <- renderUI({
+    checkboxInput(inputId = "mapSettlementsPlot",
+                  label = "Plot settlements",
+                  value = FALSE)
+  })
+  #
+  # Sample for a country survey
+  #
+  observeEvent(input$mapSamplingPlotCountry, {
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "area") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
@@ -403,30 +444,65 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
     #
-    # Plot grids
+    # Plot all
     #
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
       addPolygons(data = mapCountry(),
                   color = "yellow",
                   weight = 6,
-                  fill = FALSE) %>%
+                  fill = FALSE) %>% 
       addPolygons(data = mapSamplingGrid,
                   color = "blue",
                   weight = 4,
-                  fill = FALSE)
+                  fill = FALSE) #%>%
+      #addCircleMarkers(data = mapSamplingPoint@coords,
+      #                 lng = mapSamplingPoint@coords$x,
+      #                 lat = mapSamplingPoint@coords$y,
+      #                 color = "red",
+      #                 radius = 2) %>%
+      #addCircleMarkers(data = settlements,
+      #                 lng = settlements$COORD_X,
+      #                 lat = settlements$COORD_Y,
+      #                 color = "darkgreen",
+      #                 radius = 0.5)
+  })
+  #
+  # Reset country grid parameters
+  #
+  observeEvent(input$mapSamplingGridPlotCountryReset, {
+    leafletProxy("mapSampling") %>%
+      clearShapes()
+    updateSelectInput(session = session,
+      inputId = "mapSamplingAreaType",
+      label = "Select area type to sample",
+      choices = list("Choose one" = "",
+                     "Country" = "country",
+                     "County" = "county",
+                     "District" = "district"),
+      selected = NULL)
   })
   #
   # Plot county sampling grid
@@ -471,6 +547,30 @@ server <- function(input, output, session) {
                   fill = FALSE)
   })
   #
+  # Reset county grid parameters
+  #
+  observeEvent(input$mapSamplingGridPlotCountyReset, {
+    leafletProxy("mapSampling") %>%
+      clearShapes() %>%
+      setView(lng = geocode(location = "Liberia")[1], 
+              lat = geocode(location = "Liberia")[2], 
+              zoom = 7)
+    updateSelectInput(session = session,
+      inputId = "mapSamplingAreaType",
+      label = "Select area type to sample",
+      choices = list("Choose one" = "",
+                     "Country" = "country",
+                     "County" = "county",
+                     "District" = "district"),
+      selected = "country")
+    updateSelectInput(session = session,
+      inputId = "mapSamplingCounty",
+      label = "Select counties to sample",
+      choices = list("Select county" = "",
+                     "Counties" = counties$admin1name),
+      selected = NULL)
+  })
+  #
   # Plot district sampling grid
   #
   observeEvent(input$mapSamplingGridPlotDistrict, {
@@ -511,5 +611,26 @@ server <- function(input, output, session) {
                   color = "blue",
                   weight = 4,
                   fill = FALSE)
+  })
+  #
+  # Reset district grid parameters
+  #
+  observeEvent(input$mapSamplingGridPlotDistrictReset, {
+    leafletProxy("mapSampling") %>%
+      clearShapes()
+    updateSelectInput(session = session,
+      inputId = "mapSamplingAreaType",
+      label = "Select area type to sample",
+      choices = list("Choose one" = "",
+                     "Country" = "country",
+                     "County" = "county",
+                     "District" = "district"),
+      selected = "country")
+    updateSelectInput(session = session,
+      inputId = "mapSamplingDistrict",
+      label = "Select districts to sample",
+      choices = list("Select district" = "",
+                     "Districts" = districts$admin2Name),
+      selected = NULL)
   })
 }
