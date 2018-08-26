@@ -339,7 +339,9 @@ server <- function(input, output, session) {
   #
   observeEvent(input$mapSamplingAreaType, {
     leafletProxy("mapSampling") %>%
-      clearShapes()
+      clearShapes() %>%
+      clearMarkers() %>%
+      clearControls()
     updateSelectInput(session = session,
       inputId = "mapSamplingCounty",
       label = "Select counties to sample",
@@ -359,6 +361,8 @@ server <- function(input, output, session) {
   observeEvent(mapCountry(), {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       fitBounds(lng1 = bbox(mapCountry())[1,1], 
                 lat1 = bbox(mapCountry())[2,1], 
                 lng2 = bbox(mapCountry())[1,2], 
@@ -374,6 +378,8 @@ server <- function(input, output, session) {
   observeEvent(mapCounty(), {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       fitBounds(lng1 = bbox(mapCounty())[1,1], 
                 lat1 = bbox(mapCounty())[2,1], 
                 lng2 = bbox(mapCounty())[1,2], 
@@ -389,6 +395,8 @@ server <- function(input, output, session) {
   observeEvent(mapDistrict(), {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       fitBounds(lng1 = bbox(mapDistrict())[1,1], 
                 lat1 = bbox(mapDistrict())[2,1], 
                 lng2 = bbox(mapDistrict())[1,2], 
@@ -505,7 +513,7 @@ server <- function(input, output, session) {
       addLayersControl(
         overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Seleced Settlements"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
   })
   #
   # Reset country grid parameters
@@ -598,7 +606,7 @@ server <- function(input, output, session) {
       addLayersControl(
         overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
   })
   #
   # Reset county grid parameters
@@ -700,7 +708,7 @@ server <- function(input, output, session) {
       addLayersControl(
         overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
   })
   #
   # Reset district grid parameters
