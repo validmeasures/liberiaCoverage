@@ -243,7 +243,7 @@ ui <- dashboardPage(
                                "Districts" = districts$admin2Name),
                 selected = NULL)
             ),
-            conditionalPanel(condition = "input.mapSamplingAreaType != '' | input.mapSamplingCounty != '' | input.mapSamplingDistrict != ''",
+            conditionalPanel(condition = "input.mapSamplingAreaType == 'country' | input.mapSamplingCounty != '' | input.mapSamplingDistrict != ''",
               hr(),
               h5("Spatial sample settings"),
               selectInput(inputId = "mapSamplingSpec",
@@ -255,27 +255,22 @@ ui <- dashboardPage(
               conditionalPanel(condition = "input.mapSamplingSpec == 'area'",
                 numericInput(inputId = "mapSamplingGridArea",
                   label = "Set grid area size (in sq kms)",
-                  value = 100, min = 5, max = 500, step = 5),
-                numericInput(inputId = "mapSamplingSettlementsNumber",
-                             label = "No. of settlements per sampling point",
-                             value = 1, min = 1, max = 10, step = 1)
+                  value = 100, min = 5, max = 500, step = 5)
               ),
               conditionalPanel(condition = "input.mapSamplingSpec == 'n'",
                 numericInput(inputId = "mapSamplingGridNumber",
                   label = "Set grid number",
-                  value = 20, min = 16, max = 30, step = 1),
-                numericInput(inputId = "mapSamplingSettlementsNumber",
-                             label = "No. of settlements per sampling point",
-                             value = 1, min = 1, max = 10, step = 1)
+                  value = 20, min = 16, max = 30, step = 1)
               ),
               conditionalPanel(condition = "input.mapSamplingSpec == 'd'",
                 numericInput(inputId = "mapSamplingGridDist",
                   label = "Set max distance to sampling point (in kms)",
-                  value = 10, min = 5, max = 30, step = 1),
-                numericInput(inputId = "mapSamplingSettlementsNumber",
-                  label = "No. of settlements per sampling point",
-                  value = 1, min = 1, max = 10, step = 1)
+                  value = 10, min = 5, max = 30, step = 1)
               ),
+              numericInput(inputId = "mapSamplingSettlementsNumber",
+                label = "No. of settlements per sampling point",
+                value = 1, min = 1, max = 10, step = 1),
+              br(),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'country'",
                 actionButton(inputId = "mapSamplingPlotCountry",
                   label = "Sample",
