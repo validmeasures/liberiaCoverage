@@ -423,7 +423,7 @@ server <- function(input, output, session) {
                   value = FALSE)
   })
   #
-  # Sample for a country survey
+  # Plot country sampling grid
   #
   observeEvent(input$mapSamplingPlotCountry, {
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "area") {
@@ -470,31 +470,42 @@ server <- function(input, output, session) {
     #
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       addPolygons(data = mapCountry(),
                   color = "yellow",
                   weight = 6,
-                  fill = FALSE) %>% 
+                  fill = FALSE) %>%
+      addCircleMarkers(data = settlements,
+                  lng = ~COORD_X,
+                  lat = ~COORD_Y,
+                  color = "darkgreen",
+                  radius = 0.5,
+                  group = "Settlements") %>%
       addPolygons(data = mapSamplingGrid,
                   color = "blue",
                   weight = 4,
-                  fill = FALSE) #%>%
-      #addCircleMarkers(data = mapSamplingPoint@coords,
-      #                 lng = mapSamplingPoint@coords$x,
-      #                 lat = mapSamplingPoint@coords$y,
-      #                 color = "red",
-      #                 radius = 2) %>%
-      #addCircleMarkers(data = settlements,
-      #                 lng = settlements$COORD_X,
-      #                 lat = settlements$COORD_Y,
-      #                 color = "darkgreen",
-      #                 radius = 0.5)
+                  fill = FALSE,
+                  group = "Sampling Grid") %>%
+      addCircleMarkers(data = mapSamplingPoint,
+                       lng = mapSamplingPoint@coords[,1],
+                       lat = mapSamplingPoint@coords[,2],
+                       color = "red",
+                       radius = 1,
+                       group = "Sampling Points") %>%
+      addLayersControl(
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        position = "topright",
+        options = layersControlOptions(collapsed = FALSE))
   })
   #
   # Reset country grid parameters
   #
   observeEvent(input$mapSamplingPlotCountryReset, {
     leafletProxy("mapSampling") %>%
-      clearShapes()
+      clearShapes() %>%
+      clearMarkers() %>%
+      clearControls()
     updateSelectInput(session = session,
       inputId = "mapSamplingAreaType",
       label = "Select area type to sample",
@@ -513,6 +524,11 @@ server <- function(input, output, session) {
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapCounty(),
@@ -521,12 +537,22 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapCounty(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
@@ -537,14 +563,33 @@ server <- function(input, output, session) {
     #
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       addPolygons(data = mapCounty(),
                   color = "yellow",
                   weight = 6,
                   fill = FALSE) %>%
+      addCircleMarkers(data = settlements,
+                       lng = ~COORD_X,
+                       lat = ~COORD_Y,
+                       color = "darkgreen",
+                       radius = 0.5,
+                       group = "Settlements") %>%
       addPolygons(data = mapSamplingGrid,
                   color = "blue",
                   weight = 4,
-                  fill = FALSE)
+                  fill = FALSE,
+                  group = "Sampling Grid") %>%
+      addCircleMarkers(data = mapSamplingPoint,
+                       lng = mapSamplingPoint@coords[,1],
+                       lat = mapSamplingPoint@coords[,2],
+                       color = "red",
+                       radius = 1,
+                       group = "Sampling Points") %>%
+      addLayersControl(
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        position = "topright",
+        options = layersControlOptions(collapsed = FALSE))
   })
   #
   # Reset county grid parameters
@@ -552,6 +597,8 @@ server <- function(input, output, session) {
   observeEvent(input$mapSamplingPlotCountyReset, {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       setView(lng = geocode(location = "Liberia")[1], 
               lat = geocode(location = "Liberia")[2], 
               zoom = 7)
@@ -579,6 +626,11 @@ server <- function(input, output, session) {
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
@@ -587,12 +639,22 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
+      mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                  data.x = "COORD_X",
+                                                  data.y = "COORD_Y",
+                                                  query = mapSamplingPoint,
+                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
@@ -603,21 +665,42 @@ server <- function(input, output, session) {
     #
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
+      clearMarkers() %>%
+      clearControls() %>%
       addPolygons(data = mapDistrict(),
                   color = "yellow",
                   weight = 6,
                   fill = FALSE) %>%
+      addCircleMarkers(data = settlements,
+                       lng = ~COORD_X,
+                       lat = ~COORD_Y,
+                       color = "darkgreen",
+                       radius = 0.5,
+                       group = "Settlements") %>%
       addPolygons(data = mapSamplingGrid,
                   color = "blue",
                   weight = 4,
-                  fill = FALSE)
+                  fill = FALSE,
+                  group = "Sampling Grid") %>%
+      addCircleMarkers(data = mapSamplingPoint,
+                       lng = mapSamplingPoint@coords[,1],
+                       lat = mapSamplingPoint@coords[,2],
+                       color = "red",
+                       radius = 1,
+                       group = "Sampling Points") %>%
+      addLayersControl(
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        position = "topright",
+        options = layersControlOptions(collapsed = FALSE))
   })
   #
   # Reset district grid parameters
   #
   observeEvent(input$mapSamplingPlotDistrictReset, {
     leafletProxy("mapSampling") %>%
-      clearShapes()
+      clearShapes() %>%
+      clearMarkers() %>%
+      clearControls()
     updateSelectInput(session = session,
       inputId = "mapSamplingAreaType",
       label = "Select area type to sample",
