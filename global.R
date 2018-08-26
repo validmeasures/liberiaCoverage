@@ -22,6 +22,7 @@
 if(!require(shiny)) install.packages("shiny")
 if(!require(shinydashboard)) install.packages("shinydashboard")
 if(!require(devtools)) install.packages("devtools")
+if(!require(magrittr)) install.packages("magrittr")
 if(!require(bbw)) install.packages("bbw")
 if(!require(shinyjs)) install.packages("shinyjs")
 if(!require(maptools)) install.package("maptools")
