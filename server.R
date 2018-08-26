@@ -493,8 +493,17 @@ server <- function(input, output, session) {
                        color = "red",
                        radius = 1,
                        group = "Sampling Points") %>%
+      addCircleMarkers(data = mapSamplingSettlements,
+                       lng = ~COORD_X,
+                       lat = ~COORD_Y,
+                       color = "red",
+                       fill = FALSE,
+                       fillOpacity = 0,
+                       radius = 6,
+                       weight = 1,
+                       group = "Selected Settlements") %>%
       addLayersControl(
-        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Seleced Settlements"),
         position = "topright",
         options = layersControlOptions(collapsed = FALSE))
   })
