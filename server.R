@@ -439,11 +439,6 @@ server <- function(input, output, session) {
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
@@ -452,27 +447,22 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                data.x = "COORD_X",
+                                                data.y = "COORD_Y",
+                                                query = mapSamplingPoint,
+                                                n = input$mapSamplingSettlementsNumber)
     #
     # Plot all
     #
@@ -513,7 +503,7 @@ server <- function(input, output, session) {
       addLayersControl(
         overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Seleced Settlements"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = FALSE))
   })
   #
   # Reset country grid parameters
@@ -541,11 +531,6 @@ server <- function(input, output, session) {
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapCounty(),
@@ -554,27 +539,22 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapCounty(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                data.x = "COORD_X",
+                                                data.y = "COORD_Y",
+                                                query = mapSamplingPoint,
+                                                n = input$mapSamplingSettlementsNumber)
     #
     # Plot grids
     #
@@ -603,10 +583,19 @@ server <- function(input, output, session) {
                        color = "red",
                        radius = 1,
                        group = "Sampling Points") %>%
+      addCircleMarkers(data = mapSamplingSettlements,
+                       lng = ~COORD_X,
+                       lat = ~COORD_Y,
+                       color = "red",
+                       fill = FALSE,
+                       fillOpacity = 0,
+                       radius = 6,
+                       weight = 1,
+                       group = "Selected Settlements") %>%
       addLayersControl(
-        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Selected Settlements"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = FALSE))
   })
   #
   # Reset county grid parameters
@@ -643,11 +632,6 @@ server <- function(input, output, session) {
                                          area = input$mapSamplingGridArea,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
@@ -656,27 +640,22 @@ server <- function(input, output, session) {
                                          buffer = 2,
                                          n.factor = 5,
                                          fixed = TRUE)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "d") {
       mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
                                          d = input$mapSamplingGridDist,
                                          country = "Liberia",
                                          buffer = 2)
-      mapSamplingSettlements <- get_nearest_point(data = settlements,
-                                                  data.x = "COORD_X",
-                                                  data.y = "COORD_Y",
-                                                  query = mapSamplingPoint,
-                                                  n = input$mapSamplingSettlementsNumber)
     }
     #
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
+    mapSamplingSettlements <- get_nearest_point(data = settlements,
+                                                data.x = "COORD_X",
+                                                data.y = "COORD_Y",
+                                                query = mapSamplingPoint,
+                                                n = input$mapSamplingSettlementsNumber)
     #
     # Plot grids
     #
@@ -705,10 +684,19 @@ server <- function(input, output, session) {
                        color = "red",
                        radius = 1,
                        group = "Sampling Points") %>%
+      addCircleMarkers(data = mapSamplingSettlements,
+                       lng = ~COORD_X,
+                       lat = ~COORD_Y,
+                       color = "red",
+                       fill = FALSE,
+                       fillOpacity = 0,
+                       radius = 6,
+                       weight = 1,
+                       group = "Selected Settlements") %>%
       addLayersControl(
-        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points"),
+        overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Selected Settlements"),
         position = "topright",
-        options = layersControlOptions(collapsed = FALSE, autoZIndex = TRUE))
+        options = layersControlOptions(collapsed = FALSE, autoZIndex = FALSE))
   })
   #
   # Reset district grid parameters
