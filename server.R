@@ -492,7 +492,7 @@ server <- function(input, output, session) {
   #
   # Reset country grid parameters
   #
-  observeEvent(input$mapSamplingGridPlotCountryReset, {
+  observeEvent(input$mapSamplingPlotCountryReset, {
     leafletProxy("mapSampling") %>%
       clearShapes()
     updateSelectInput(session = session,
@@ -507,7 +507,7 @@ server <- function(input, output, session) {
   #
   # Plot county sampling grid
   #
-  observeEvent(input$mapSamplingGridPlotCounty, {
+  observeEvent(input$mapSamplingPlotCounty, {
     if(input$mapSamplingAreaType == "county" & input$mapSamplingSpec == "area") {
       mapSamplingPoint <- create_sp_grid(x = mapCounty(),
                                          area = input$mapSamplingGridArea,
@@ -549,7 +549,7 @@ server <- function(input, output, session) {
   #
   # Reset county grid parameters
   #
-  observeEvent(input$mapSamplingGridPlotCountyReset, {
+  observeEvent(input$mapSamplingPlotCountyReset, {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
       setView(lng = geocode(location = "Liberia")[1], 
@@ -573,7 +573,7 @@ server <- function(input, output, session) {
   #
   # Plot district sampling grid
   #
-  observeEvent(input$mapSamplingGridPlotDistrict, {
+  observeEvent(input$mapSamplingPlotDistrict, {
     if(input$mapSamplingAreaType == "district" & input$mapSamplingSpec == "area") {
       mapSamplingPoint <- create_sp_grid(x = mapDistrict(),
                                          area = input$mapSamplingGridArea,
@@ -615,7 +615,7 @@ server <- function(input, output, session) {
   #
   # Reset district grid parameters
   #
-  observeEvent(input$mapSamplingGridPlotDistrictReset, {
+  observeEvent(input$mapSamplingPlotDistrictReset, {
     leafletProxy("mapSampling") %>%
       clearShapes()
     updateSelectInput(session = session,
