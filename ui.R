@@ -273,14 +273,20 @@ ui <- dashboardPage(
               br(),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'country'",
                 actionButton(inputId = "mapSamplingPlotCountry",
-                  label = "Sample",
+                  label = "",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
                 actionButton(inputId = "mapSamplingPlotCountryReset",
-                  label = "Reset",
+                  label = "",
                   icon = icon(name = "refresh",
+                              lib = "font-awesome",
+                              class = "fa-lg")
+                ),
+                actionButton(inputId = "mapSamplingListDownload",
+                  label = "",
+                  icon = icon(name = "download",
                               lib = "font-awesome",
                               class = "fa-lg")
                 )
