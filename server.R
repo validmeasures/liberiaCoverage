@@ -314,8 +314,8 @@ server <- function(input, output, session) {
   output$mapSampling <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$Esri.NatGeoWorldMap) %>%      
-      setView(lng = geocode(location = "Liberia")[1], 
-              lat = geocode(location = "Liberia")[2], 
+      setView(lng = -9.429499, #geocode(location = "Liberia")[1], 
+              lat = 6.428055, #geocode(location = "Liberia")[2], 
               zoom = 7)
   })
   #
@@ -520,7 +520,10 @@ server <- function(input, output, session) {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
       clearMarkers() %>%
-      clearControls()
+      clearControls() %>%      
+      setView(lng = -9.429499, #geocode(location = "Liberia")[1], 
+              lat = 6.428055, #geocode(location = "Liberia")[2], 
+              zoom = 7)
     updateSelectInput(session = session,
       inputId = "mapSamplingAreaType",
       label = "Select area type to sample",
@@ -612,9 +615,9 @@ server <- function(input, output, session) {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
       clearMarkers() %>%
-      clearControls() %>%
-      setView(lng = geocode(location = "Liberia")[1], 
-              lat = geocode(location = "Liberia")[2], 
+      clearControls() %>%      
+      setView(lng = -9.429499, #geocode(location = "Liberia")[1], 
+              lat = 6.428055, #geocode(location = "Liberia")[2], 
               zoom = 7)
     updateSelectInput(session = session,
       inputId = "mapSamplingAreaType",
@@ -713,7 +716,10 @@ server <- function(input, output, session) {
     leafletProxy("mapSampling") %>%
       clearShapes() %>%
       clearMarkers() %>%
-      clearControls()
+      clearControls() %>%      
+      setView(lng = -9.429499, #geocode(location = "Liberia")[1], 
+              lat = 6.428055, #geocode(location = "Liberia")[2], 
+              zoom = 7)
     updateSelectInput(session = session,
       inputId = "mapSamplingAreaType",
       label = "Select area type to sample",
