@@ -499,6 +499,7 @@ server <- function(input, output, session) {
                        radius = 6,
                        weight = 1,
                        group = "Selected Settlements") %>%
+      hideGroup("Sampling Grid") %>%
       addLayersControl(
         overlayGroups = c("Settlements", "Sampling Grid", "Sampling Points", "Seleced Settlements"),
         position = "topright",
