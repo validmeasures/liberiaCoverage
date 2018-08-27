@@ -293,30 +293,42 @@ ui <- dashboardPage(
               ),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'county'",
                 actionButton(inputId = "mapSamplingPlotCounty",
-                  label = "Sample",
+                  label = "",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
                 actionButton(inputId = "mapSamplingPlotCountyReset",
-                  label = "Reset",
+                  label = "",
                   icon = icon(name = "refresh",
                               lib = "font-awesome",
                               class = "fa-lg")
+                ),
+                actionButton(inputId = "mapSamplingListDownload",
+                             label = "",
+                             icon = icon(name = "download",
+                                         lib = "font-awesome",
+                                         class = "fa-lg")
                 )
               ),
               conditionalPanel(condition = "input.mapSamplingAreaType == 'district'",
                 actionButton(inputId = "mapSamplingPlotDistrict",
-                  label = "Sample",
+                  label = "",
                   icon = icon(name = "th",
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
                 actionButton(inputId = "mapSamplingPlotDistrictReset",
-                  label = "Reset",
+                  label = "",
                   icon = icon(name = "refresh",
                               lib = "font-awesome",
                               class = "fa-lg")
+                ),
+                actionButton(inputId = "mapSamplingListDownload",
+                             label = "",
+                             icon = icon(name = "download",
+                                         lib = "font-awesome",
+                                         class = "fa-lg")
                 )
               )
             )
