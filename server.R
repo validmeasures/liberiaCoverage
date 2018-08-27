@@ -435,18 +435,9 @@ server <- function(input, output, session) {
   #
   observeEvent(input$mapSamplingPlotCountry, {
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "area") {
-      #mapSamplingPoint <- create_sp_grid(x = mapCountry(),
-      #                                   area = input$mapSamplingGridArea,
-      #                                   country = "Liberia",
-      #                                   buffer = 2)
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
-                                         n = calculate_n(mapCountry(), 
-                                                         area = input$mapSamplingGridArea, 
-                                                         country = "Liberia"),
-                                         country = "Liberia",
-                                         buffer = 2,
-                                         n.factor = 5,
-                                         fixed = TRUE)
+                                         area = input$mapSamplingGridArea,
+                                         country = "Liberia")
     }
     if(input$mapSamplingAreaType == "country" & input$mapSamplingSpec == "n") {
       mapSamplingPoint <- create_sp_grid(x = mapCountry(),
