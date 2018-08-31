@@ -727,4 +727,24 @@ server <- function(input, output, session) {
                      "Districts" = districts$admin2Name),
       selected = NULL)
   })
+  #
+  #
+  #
+  #output$sample.slum.table <- DT::renderDataTable(DT::datatable({
+    #
+    #
+    #
+    #sample.slum.list()
+  #}))
+  #
+  #
+  #
+  #output$samplingList <- downloadHandler(
+    #filename = function() {
+    #  "samplingList.csv"
+    #},
+    #content = function(file) {
+    #  write.csv(sample.slum.list(), file)
+    #}
+  #)  
 }
