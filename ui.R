@@ -284,7 +284,7 @@ ui <- dashboardPage(
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
-                actionButton(inputId = "mapSamplingListDownload",
+                downloadButton(outputId = "samplingListDownloadCountry",
                   label = "",
                   icon = icon(name = "download",
                               lib = "font-awesome",
@@ -304,7 +304,7 @@ ui <- dashboardPage(
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
-                actionButton(inputId = "mapSamplingListDownload",
+                downloadButton(outputId = "samplingListDownloadCounty",
                              label = "",
                              icon = icon(name = "download",
                                          lib = "font-awesome",
@@ -324,11 +324,11 @@ ui <- dashboardPage(
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
-                actionButton(inputId = "mapSamplingListDownload",
-                             label = "",
-                             icon = icon(name = "download",
-                                         lib = "font-awesome",
-                                         class = "fa-lg")
+                downloadButton(outputId = "samplingListDownloadDistrict",
+                  label = "",
+                  icon = icon(name = "download",
+                              lib = "font-awesome",
+                              class = "fa-lg")
                 )
               )
             )
@@ -338,6 +338,17 @@ ui <- dashboardPage(
             status = "danger",
             width = 8,
             leafletOutput("mapSampling", height = 600)
+          )
+        ),
+        hr(),
+        fluidRow(
+          conditionalPanel(condition = "input.mapSamplingPlotCountry > 0 | input.mapSamplingPlotCounty > 0 | input.mapSamplingPlotDistrict > 0",
+            box(title = "Stage 1 sample list",
+              solidHeader = TRUE,
+              status = "danger",
+              width = 12,
+              DT::dataTableOutput("mapSamplingTable")
+            )
           )
         )
       ),
