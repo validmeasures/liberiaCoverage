@@ -463,6 +463,23 @@ server <- function(input, output, session) {
                                                 query = mapSamplingPoint,
                                                 n = input$mapSamplingSettlementsNumber)
     #
+    #
+    #
+    output$samplingListDownloadCountry <- downloadHandler(
+      filename = function() {
+        "countrySamplingList.csv"
+      },
+      content = function(file) {
+        write.csv(mapSamplingSettlements, file)
+      }
+    )
+    #
+    #
+    #
+    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
+      mapSamplingSettlements
+    }))
+    #
     # Plot all
     #
     leafletProxy("mapSampling") %>%
@@ -558,6 +575,23 @@ server <- function(input, output, session) {
                                                 data.y = "COORD_Y",
                                                 query = mapSamplingPoint,
                                                 n = input$mapSamplingSettlementsNumber)
+    #
+    #
+    #
+    output$samplingListDownloadCounty <- downloadHandler(
+      filename = function() {
+        "countySamplingList.csv"
+      },
+      content = function(file) {
+        write.csv(mapSamplingSettlements, file)
+      }
+    )
+    #
+    #
+    #
+    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
+      mapSamplingSettlements
+    }))
     #
     # Plot grids
     #
@@ -660,6 +694,23 @@ server <- function(input, output, session) {
                                                 query = mapSamplingPoint,
                                                 n = input$mapSamplingSettlementsNumber)
     #
+    #
+    #
+    output$samplingListDownloadDistrict <- downloadHandler(
+      filename = function() {
+        "districtSamplingList.csv"
+      },
+      content = function(file) {
+        write.csv(mapSamplingSettlements, file)
+      }
+    )
+    #
+    #
+    #
+    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
+      mapSamplingSettlements
+    }))
+    #
     # Plot grids
     #
     leafletProxy("mapSampling") %>%
@@ -727,24 +778,4 @@ server <- function(input, output, session) {
                      "Districts" = districts$admin2Name),
       selected = NULL)
   })
-  #
-  #
-  #
-  #output$sample.slum.table <- DT::renderDataTable(DT::datatable({
-    #
-    #
-    #
-    #sample.slum.list()
-  #}))
-  #
-  #
-  #
-  #output$samplingList <- downloadHandler(
-    #filename = function() {
-    #  "samplingList.csv"
-    #},
-    #content = function(file) {
-    #  write.csv(sample.slum.list(), file)
-    #}
-  #)  
 }
