@@ -434,18 +434,21 @@ ui <- dashboardPage(
                       label = "Remote URL",
                       placeholder = "https://odk.ona.io"),
                     textInput(inputId = "inputOdkUsername2",
-                      label = "Username"),
+                      label = "Username",
+                      value = "cadnihead"),
                     textInput(inputId = "inputOdkPassword2",
                       label = "Password"),
                     textInput(inputId = "inputOdkFormId2",
-                      label = "Form ID")
+                      label = "Form ID",
+                      value = "liberiaVillageForm")
                   ),
                   conditionalPanel(condition = "input.inputOdkData2 == 'local'",
                     textInput(inputId = "inputOdkDirectory2",
                       label = "Where is the local ODK directory located?",
                       value = getwd()),
                     textInput(inputId = "inputOdkFormId2",
-                      label = "Form ID")
+                      label = "Form ID",
+                      value = "liberiaVillageForm")
                   ),
                   conditionalPanel(condition = "input.inputOdkFormId2 == ' '",
                     actionButton(inputId = "inputDataAction2",
@@ -497,18 +500,21 @@ ui <- dashboardPage(
                       label = "Remote URL",
                       placeholder = "https://odk.ona.io"),
                     textInput(inputId = "inputOdkUsername1",
-                      label = "Username"),
+                      label = "Username",
+                      value = "cadnihead"),
                     textInput(inputId = "inputOdkPassword1",
                       label = "Password"),
                     textInput(inputId = "inputOdkFormId1",
-                      label = "Form ID")
+                      label = "Form ID",
+                      value = "liberiaCoverage")
                   ),
                   conditionalPanel(condition = "input.inputOdkData1 == 'local'",
                     textInput(inputId = "inputOdkDirectory1",
                       label = "Where is the local ODK directory located?",
                       value = getwd()),
                     textInput(inputId = "inputOdkFormId1",
-                      label = "Form ID")
+                      label = "Form ID",
+                      value = "liberiaCoverage")
                   ),
                   conditionalPanel(condition = "input.inputOdkFormId1 == ' '",
                     actionButton(inputId = "inputDataAction1",
