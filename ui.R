@@ -314,7 +314,7 @@ ui <- dashboardPage(
               conditionalPanel(condition = "input.mapSamplingAreaType == 'district'",
                 actionButton(inputId = "mapSamplingPlotDistrict",
                   label = "",
-                  icon = icon(name = "th",
+                  icon = icon(name = "globe",
                               lib = "font-awesome",
                               class = "fa-lg")
                 ),
@@ -340,7 +340,6 @@ ui <- dashboardPage(
             leafletOutput("mapSampling", height = 600)
           )
         ),
-        hr(),
         fluidRow(
           conditionalPanel(condition = "input.mapSamplingPlotCountry > 0 | input.mapSamplingPlotCounty > 0 | input.mapSamplingPlotDistrict > 0",
             box(title = "Stage 1 sample list",
@@ -525,11 +524,13 @@ ui <- dashboardPage(
                   )
                 )
               ),
-              conditionalPanel(condition = "input.inpuDataAction1 > 0",
+              conditionalPanel(condition = "input$inputDataRaw1", #"input.inpuDataAction1 > 0",
                 box(title = "Raw Village Data",
                   solidHeader = TRUE,
                   status = "danger",
-                  width = 8)
+                  width = 8,
+                  DT::dataTableOutput("villageDataTable")
+                )
               )
             )
           )
