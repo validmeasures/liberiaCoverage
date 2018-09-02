@@ -838,7 +838,8 @@ server <- function(input, output, session) {
   #
   # Output survey data table
   #
-  output$surveyDataTable <- DT::renderDataTable(DT::datatable({
-    surveyData()
-  }))
+  output$surveyDataTable <- DT::renderDataTable(
+    expr = surveyData(),
+    options = list(scrollX = TRUE)
+  )
 }
