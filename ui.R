@@ -400,7 +400,8 @@ ui <- dashboardPage(
                 )
               )
             ),
-            tabPanel(title = "Check Raw Data"),
+            tabPanel(title = "Check Raw Data",
+              fluidRow()),
             tabPanel(title = "Input Raw Coverage Data",
               fluidRow(
                 box(title = "Input Raw Coverage Data",
@@ -517,7 +518,7 @@ ui <- dashboardPage(
                     )
                   )                  
                 ),
-                conditionalPanel(condition = "input.inputDataRaw1.length = 0",
+                conditionalPanel(condition = "input.inputDataRaw1.length > 0",
                   box(title = "Raw Village Data",
                     solidHeader = TRUE,
                     status = "danger",
