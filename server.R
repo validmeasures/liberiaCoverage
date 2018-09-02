@@ -474,11 +474,12 @@ server <- function(input, output, session) {
       }
     )
     #
+    # Output data table
     #
-    #
-    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
-      mapSamplingSettlements
-    }))
+    output$mapSamplingTable <- DT::renderDataTable(
+      expr = mapSamplingSettlements,
+      options = list(scrollX = TRUE)
+    )
     #
     # Plot all
     #
@@ -570,7 +571,7 @@ server <- function(input, output, session) {
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
-    mapSamplingSettlements <- get_nearest_point(data = settlements,
+    mapSamplingSettlements <- get_nearest_point(data = settlements[settlements$admin1Name == input$mapSamplingCounty, ],
                                                 data.x = "COORD_X",
                                                 data.y = "COORD_Y",
                                                 query = mapSamplingPoint,
@@ -587,11 +588,12 @@ server <- function(input, output, session) {
       }
     )
     #
+    # Output data table
     #
-    #
-    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
-      mapSamplingSettlements
-    }))
+    output$mapSamplingTable <- DT::renderDataTable(
+      expr = mapSamplingSettlements,
+      options = list(scrollX = TRUE)
+    )
     #
     # Plot grids
     #
@@ -688,7 +690,7 @@ server <- function(input, output, session) {
     # Convert to hexagonal SpatialPolygons
     #
     mapSamplingGrid <- HexPoints2SpatialPolygons(hex = mapSamplingPoint)
-    mapSamplingSettlements <- get_nearest_point(data = settlements,
+    mapSamplingSettlements <- get_nearest_point(data = settlements[settlements$admin2Name == input$mapSamplingDistrict, ],
                                                 data.x = "COORD_X",
                                                 data.y = "COORD_Y",
                                                 query = mapSamplingPoint,
@@ -705,11 +707,12 @@ server <- function(input, output, session) {
       }
     )
     #
+    # Output data table
     #
-    #
-    output$mapSamplingTable <- DT::renderDataTable(DT::datatable({
-      mapSamplingSettlements
-    }))
+    output$mapSamplingTable <- DT::renderDataTable(
+      expr = mapSamplingSettlements,
+      options = list(scrollX = TRUE)
+    )
     #
     # Plot grids
     #
@@ -778,4 +781,64 @@ server <- function(input, output, session) {
                      "Districts" = districts$admin2Name),
       selected = NULL)
   })
+  ##############################################################################
+  #
+  # Data processing
+  #
+  ##############################################################################
+  #
+  # Input - village data
+  #
+  villageData <- reactive({
+    inputFile <- input$inputDataRaw1
+    if(is.null(inputFile)) {
+      return(NULL)
+    }
+    read.csv(file = inputFile$datapath, header = TRUE, sep = ",")
+  })
+  #
+  # Download village data
+  #
+  output$villageDataDownload <- downloadHandler(
+    filename = function() {
+      "villageData.csv"
+    },
+    content = function(file) {
+      write.csv(villageData(), file)
+    }
+  )
+  #
+  # Output village data table
+  #
+  output$villageDataTable <- DT::renderDataTable(
+    expr = villageData(),
+    options = list(scrollX = TRUE)
+  )
+  #
+  # Input - survey data
+  #
+  surveyData <- reactive({
+    inputFile <- input$inputDataRaw2
+    if(is.null(inputFile)) {
+      return(NULL)
+    }
+    read.csv(file = inputFile$datapath, header = TRUE, sep = ",")
+  })
+  #
+  # Download survey data
+  #
+  output$surveyDataDownload <- downloadHandler(
+    filename = function() {
+      "villageData.csv"
+    },
+    content = function(file) {
+      write.csv(surveyData(), file)
+    }
+  )
+  #
+  # Output survey data table
+  #
+  output$surveyDataTable <- DT::renderDataTable(DT::datatable({
+    surveyData()
+  }))
 }
