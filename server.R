@@ -818,7 +818,7 @@ server <- function(input, output, session) {
     get_briefcase(destination = ".")
     if(input$inputOdkData1 == "remote") {
       pull_remote(target = ".",
-                  id = input$inputOdkFormId1, 
+                  id = input$inputOdkFormId1,
                   to = ".", 
                   from = input$inputOdkUrl1, 
                   username = input$inputOdkUsername1, 
