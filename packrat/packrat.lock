@@ -8,6 +8,12 @@ Source: CRAN
 Version: 1.66.0-1
 Hash: 4cc8883584b955ed01f38f68bc03af6d
 
+Package: DT
+Source: CRAN
+Version: 0.4
+Hash: a6e844446350a7128c734516fa8215e3
+Requires: crosstalk, htmltools, htmlwidgets, magrittr
+
 Package: FNN
 Source: CRAN
 Version: 1.1.2.1
@@ -257,10 +263,6 @@ GithubRepo: git2r
 GithubUsername: ropensci
 GithubRef: master
 GithubSha1: 67b4d3745e1017b952b509691e34eef7c0457cc2
-RemoteHost: https://api.github.com
-RemoteRepo: git2r
-RemoteUsername: ropensci
-RemoteSha: 67b4d3745e1017b952b509691e34eef7c0457cc2
 
 Package: glue
 Source: CRAN
@@ -382,8 +384,8 @@ Hash: 88926ad9c43581fd0822a37c8ed09f05
 
 Package: leaflet
 Source: CRAN
-Version: 2.0.1
-Hash: 68a9427d9ed7a1b724c23698278d51e1
+Version: 2.0.2
+Hash: da55402e4875c0253df918df0e97d4c4
 Requires: RColorBrewer, base64enc, crosstalk, htmltools, htmlwidgets,
     magrittr, markdown, png, raster, scales, sp, viridis
 
@@ -480,10 +482,18 @@ Version: 7.3-12
 Hash: 42c83a1f063b40fd8bb6ad68ed528aa5
 
 Package: odkr
-Source: CRAN
-Version: 0.2.0
-Hash: 8decff13669681d2f3c1fea749b862ed
+Source: github
+Version: 0.3.1.9000
+Hash: 714f38b95d5ac83d0bf174b35928c24f
 Requires: Hmisc, curl, rJava, stringr
+GithubRepo: odkr
+GithubUsername: validmeasures
+GithubRef: master
+GithubSha1: a4c8115f21beb10439a6644f7dea2814dd042d2d
+RemoteHost: https://api.github.com
+RemoteRepo: odkr
+RemoteUsername: validmeasures
+RemoteSha: a4c8115f21beb10439a6644f7dea2814dd042d2d
 
 Package: openssl
 Source: CRAN
@@ -645,10 +655,9 @@ RemoteSha: 2192d080890510dc72c7e7239064f13c76659773
 
 Package: scales
 Source: CRAN
-Version: 0.5.0
-Hash: ba1cc82f671616a93baa1eda27e4e364
-Requires: R6, RColorBrewer, Rcpp, dichromat, labeling, munsell, plyr,
-    viridisLite
+Version: 1.0.0
+Hash: 17b6945d25b9288cdf03f5e5005842dc
+Requires: R6, RColorBrewer, Rcpp, labeling, munsell, viridisLite
 
 Package: shiny
 Source: CRAN
@@ -793,13 +802,13 @@ Requires: lattice
 Package: zscorer
 Source: github
 Version: 0.2.0
-Hash: ba12e5cc00b18e0ab48e2c3a39dcb817
+Hash: 422b6fc628be49995b1b1e76bae5bfdd
 Requires: tidyr
 GithubRepo: zscorer
 GithubUsername: nutriverse
 GithubRef: master
-GithubSha1: dff2ac785c4196fa9a8878a6064b79554cff36a8
+GithubSha1: 8286a8ea9ffa1a3b43534637862f84904fa49b96
 RemoteHost: https://api.github.com
 RemoteRepo: zscorer
 RemoteUsername: nutriverse
-RemoteSha: dff2ac785c4196fa9a8878a6064b79554cff36a8
+RemoteSha: 8286a8ea9ffa1a3b43534637862f84904fa49b96
