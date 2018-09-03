@@ -825,10 +825,15 @@ server <- function(input, output, session) {
                   from = input$inputOdkUrl1,
                   username = input$inputOdkUsername1, 
                   password = input$inputOdkPassword1)
+      
+      export_data(target = ".",
+                  id = input$inputOdkFormId1,
+                  to = "data/",
+                  from = ".",
+                  filename = "rawVillageData.csv",
+                  overwrite = TRUE)
     }
   })
-  
-  
   #
   # Input - survey data
   #
