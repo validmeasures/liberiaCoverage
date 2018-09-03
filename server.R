@@ -814,6 +814,19 @@ server <- function(input, output, session) {
     expr = villageData(),
     options = list(scrollX = TRUE)
   )
+  observeEvent(input$inputDataAction1, {
+    get_briefcase(destination = ".")
+    if(input$inputOdkData1 == "remote") {
+      pull_remote(target = ".",
+                  id = input$inputOdkFormId1, 
+                  to = ".", 
+                  from = input$inputOdkUrl1, 
+                  username = input$inputOdkUsername1, 
+                  password = input$inputOdkPassword1)
+    }
+  })
+  
+  
   #
   # Input - survey data
   #
