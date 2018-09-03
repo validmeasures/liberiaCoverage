@@ -815,12 +815,14 @@ server <- function(input, output, session) {
     options = list(scrollX = TRUE)
   )
   observeEvent(input$inputDataAction1, {
-    get_briefcase(destination = ".")
+    if(!"odkBriefcase_latest.jar" %in% list.files()) {
+      get_briefcase(destination = ".")
+    }
     if(input$inputOdkData1 == "remote") {
       pull_remote(target = ".",
                   id = input$inputOdkFormId1,
                   to = ".", 
-                  from = input$inputOdkUrl1, 
+                  from = input$inputOdkUrl1,
                   username = input$inputOdkUsername1, 
                   password = input$inputOdkPassword1)
     }
