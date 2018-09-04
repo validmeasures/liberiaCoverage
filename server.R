@@ -783,6 +783,46 @@ server <- function(input, output, session) {
   })
   ##############################################################################
   #
+  # Collect
+  #
+  ##############################################################################
+  #
+  # PAPI
+  #
+  output$collectPapi <- renderUI({
+    HTML("
+      <p>The <strong>Liberia Coverage Survey</strong> can be implemented using paper questionnaires. A copy of the paper questionnaires can be downloaded from the following link:</p>
+      <p><a target='_blank', href='/www/forms/liberiaCoverageSurveyInstrument.pdf'><strong>Download Instrument</strong></a></p>
+      <p>When using paper forms, one should use an appropriate data entry client in which to enter the information from the completed paper questionnaires. Possible data entry clients that can be used are:</p>
+      <ul>
+        <li><a target='_blank', href='http://www.epidata.dk'>EpiData</a></li>
+        <li>EpiInfo</li>
+      ")
+  })
+  #
+  # PAPI
+  #
+  output$collectOdk <- renderUI({
+    HTML("
+      <p>The <strong>Liberia Coverage Survey</strong> can be implemented using the <a target='_blank' href='https://opendatakit.org'><strong>Open Data Kit</strong></a> digital data collection system.  The study instrument has been encoded into the electronic data entry system platform and is served from a remote server provided by <a target='_blank' href='https://ona.io'><strong>ONA</strong></a>. The remote server is provided through <a target='_blank' href='https://ona.io'><strong>ONA</strong></a> using <a target='_blank' href='http://www.validinternational.org'><strong>Valid International</strong></a>'s paid service account. A specific project called <em>Liberia Coverage Survey</em> has been created which contains the data collection forms developed for the survey.</p>
+
+      <p>Within this project, three separate accounts/users have been created within ONA with specific access privileges corresponding to their role in relation to data management for the survey. These accounts/users are:</p>
+         
+      <ol>
+        <li><strong>lisgis12</strong>: This account is the LISGIS account. The account was created by the LISGIS IT personnel. This account has privileges to <em>view</em> and <em>download</em> data. Account details including login details are kept by the LISGIS IT personnel.</li>
+         
+        <li><strong>cadnihead</strong>: This account is the survey technical team account. The technical team is composed of Abraham Zarn (UNICEF), Wesley C. Massaquoi (UNICEF) and Sando Bannel (LISGIS). This account has privileges to <em>view</em> and <em>download</em> data. Account details are kept by members of the technical team. This account can be used by members of the technical team to login to <a target='_blank' href='https://ona.io/login'><strong>ONA</strong></a> to <em>view</em> and <em>download/export</em> the available data in the remote server.</li>
+         
+        <li><strong>cadnisurvey</strong>: This account is the survey enumerators account. This is the account that is used to setup the <strong>ODK Collect</strong> app on the enumerators' tablets to be able to communicate with the server and submit completed and finalised forms. This account has privileges to <em>submit</em> data only. Account details are kept by members of the technical team.</li>
+      </ol>
+
+      <p>The XLSForm and XForm formats for use in digital data collection and instructions on how to use them can be obtained <a target='_blank' href='https://github.com/validmeasures/liberiaS3Mforms'><strong>here</strong></a>.</p>
+
+      <p>For guidance on how to implement the <strong>Liberia Coverage Survey</strong> using <a target='_blank' href='https://opedatakit.org'><strong>Open Data Kit</strong></a>, see this <a target='_blank' href='https://validmeaures.org/liberiaODKguide'><strong>guide</strong></a>.
+      ")
+  })
+  ##############################################################################
+  #
   # Data processing
   #
   ##############################################################################
@@ -820,19 +860,39 @@ server <- function(input, output, session) {
     }
     if(input$inputOdkData1 == "remote") {
       pull_remote(target = ".",
-                  id = input$inputOdkFormId1,
+                  id = input$inputOdkFormId1a,
                   to = ".", 
                   from = input$inputOdkUrl1,
                   username = input$inputOdkUsername1, 
                   password = input$inputOdkPassword1)
       
       export_data(target = ".",
-                  id = input$inputOdkFormId1,
+                  id = input$inputOdkFormId1a,
                   to = "data/",
                   from = ".",
                   filename = "rawVillageData.csv",
                   overwrite = TRUE)
     }
+    if(input$inputOdkData1 == "local") {
+      pull_local(target = ".",
+                 id = input$inputOdkFormId1b,
+                 to = ".", 
+                 from = ".")
+      
+      export_data(target = ".",
+                  id = input$inputOdkFormId1b,
+                  to = "data/",
+                  from = ".",
+                  filename = "rawVillageData.csv",
+                  overwrite = TRUE)
+    }
+    
+    villageData <- read.csv("data/rawVillageData.csv")
+    
+    output$villageDataTable <- DT::renderDataTable(
+      expr = villageData,
+      options = list(scrollX = TRUE)
+    )
   })
   #
   # Input - survey data
@@ -862,4 +922,44 @@ server <- function(input, output, session) {
     expr = surveyData(),
     options = list(scrollX = TRUE)
   )
+  observeEvent(input$inputDataAction2, {
+    if(!"odkBriefcase_latest.jar" %in% list.files()) {
+      get_briefcase(destination = ".")
+    }
+    if(input$inputOdkData2 == "remote") {
+      pull_remote(target = ".",
+                  id = input$inputOdkFormId2a,
+                  to = ".", 
+                  from = input$inputOdkUrl2,
+                  username = input$inputOdkUsername2, 
+                  password = input$inputOdkPassword2)
+      
+      export_data(target = ".",
+                  id = input$inputOdkFormId2a,
+                  to = "data/",
+                  from = ".",
+                  filename = "rawSurveyData.csv",
+                  overwrite = TRUE)
+    }
+    if(input$inputOdkData2 == "local") {
+      pull_local(target = ".",
+                 id = input$inputOdkFormId2b,
+                 to = ".", 
+                 from = ".")
+      
+      export_data(target = ".",
+                  id = input$inputOdkFormId2b,
+                  to = "data/",
+                  from = ".",
+                  filename = "rawSurveyData.csv",
+                  overwrite = TRUE)
+    }
+    
+    surveyData <- read.csv("data/rawSurveyData.csv")
+    
+    output$surveyDataTable <- DT::renderDataTable(
+      expr = surveyData,
+      options = list(scrollX = TRUE)
+    )
+  })
 }
