@@ -525,7 +525,11 @@ ui <- dashboardPage(
                 value = "coverageData",
                 fluidRow(
                   conditionalPanel(condition = "input.inputDataRaw2.length > 0",
-                    DT::dataTableOutput("surveyDataTable")
+                    box(title = NULL,
+                      width = 12,
+                      status = "danger",
+                      DT::dataTableOutput("surveyDataTable")
+                    )
                   )
                 )
               ),
@@ -533,13 +537,17 @@ ui <- dashboardPage(
                 value = "villageData",
                 fluidRow(
                   conditionalPanel(condition = "input.inputDataRaw1.length > 0",
-                    DT::dataTableOutput("villageDataTable")
+                    box(title = NULL,
+                      width = 12,
+                      status = "danger",
+                      DT::dataTableOutput("villageDataTable")
+                    )
+                  )
                 )
               )
-            )
-          ) 
-        )
-      ),
+            ) 
+          )
+        ),
       #
       # Body output when 'analyse' menu is selected
       #
