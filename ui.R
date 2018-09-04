@@ -534,11 +534,11 @@ ui <- dashboardPage(
                 fluidRow(
                   conditionalPanel(condition = "input.inputDataRaw1.length > 0",
                     DT::dataTableOutput("villageDataTable")
-                 )
-               )
-             )
-           )
-         )
+                )
+              )
+            )
+          ) 
+        )
       ),
       #
       # Body output when 'analyse' menu is selected
