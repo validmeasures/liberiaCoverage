@@ -22,32 +22,34 @@
 server <- function(input, output, session) {
   output$descriptionImam <- renderUI({
     if("sam" %in% input$designIndicators) {
-      HTML("
-        <h4>SAM treatment coverage</h4>
-        <p>SAM treatment coverage usually pertains to coverage of SAM treatment. SAM treatment coverage has two indicators:</p>
-        <ul>
-          <li>Case-finding effectiveness</li>
-          $$\\begin{aligned} 
-          \\text{Case-finding effectiveness} & ~ = ~ \\frac{C_{in}}{C_{in} ~ + ~ C_{out}} \\\\
-          \\\\
-          where: & \\\\
-          \\\\
-          C_{in} & ~ = ~ \\text{current SAM cases in the programme} \\\\
-          C_{out} & ~ = ~ \\text{current SAM cases out of the programme}
-          \\end{aligned}$$
+      withMathJax(
+        HTML("
+          <h4>SAM treatment coverage</h4>
+          <p>SAM treatment coverage usually pertains to coverage of SAM treatment. SAM treatment coverage has two indicators:</p>
+          <ul>
+            <li>Case-finding effectiveness</li>
+            $$\\begin{aligned} 
+            \\text{Case-finding effectiveness} & ~ = ~ \\frac{C_{in}}{C_{in} ~ + ~ C_{out}} \\\\
+            \\\\
+            where: & \\\\
+            \\\\
+            C_{in} & ~ = ~ \\text{current SAM cases in the programme} \\\\
+            C_{out} & ~ = ~ \\text{current SAM cases out of the programme}
+            \\end{aligned}$$
+            <br/>
+            <li>Treatment coverage</li>
+            $$\\begin{aligned}
+            \\text{Treatment coverage} & ~ = ~ \\frac{C_{in} ~ + ~ R_{in}}{C_{in} ~ + ~ R_{in} ~ + ~ C_{out} ~ + ~ R_{out}} \\\\
+            \\\\
+            where: & \\\\
+            \\\\
+            R_{in} & ~ = ~ \\text{Recovering SAM cases in the programme} \\\\
+            R_{out} & ~ = ~ \\text{Recovering SAM cases not in the programme}
+            \\end{aligned}$$
+          </ul>
           <br/>
-          <li>Treatment coverage</li>
-          $$\\begin{aligned}
-          \\text{Treatment coverage} & ~ = ~ \\frac{C_{in} ~ + ~ R_{in}}{C_{in} ~ + ~ R_{in} ~ + ~ C_{out} ~ + ~ R_{out}} \\\\
-          \\\\
-          where: & \\\\
-          \\\\
-          R_{in} & ~ = ~ \\text{Recovering SAM cases in the programme} \\\\
-          R_{out} & ~ = ~ \\text{Recovering SAM cases not in the programme}
-          \\end{aligned}$$
-        </ul>
-        <br/>
-      ")
+        ")
+      )
     }
   })
   output$descriptionVita <- renderUI({
