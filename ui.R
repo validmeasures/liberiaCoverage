@@ -355,20 +355,27 @@ ui <- dashboardPage(
       # Body output when 'collect' menu is selected
       #
       tabItem(tabName = "collect",
-        tabBox(selected = "PAPI",
+        tabBox(selected = "papi",
           title = "Collect",
           width = 12,
           side = "right",
-          tabPanel(title = "CAPI"),
-          tabPanel(title = "PAPI")
+          tabPanel(title = "Open Data Kit",
+            value = "odk",
+            h4("Digital data collection using Open Data Kit"),
+            uiOutput("collectOdk")),
+          tabPanel(title = "Pen and paper",
+            value = "papi",
+            h4("Pen and Paper Interviews"),
+            uiOutput("collectPapi")
+          )
         )
       ),
       #
       # Body output when 'process' menu is selected
       #
       tabItem(tabName = "process",
-        h2("Process Data"),
-        hr(),
+        #h2("Process Data"),
+        #hr(),
         fluidRow(
           conditionalPanel(condition = "input.process == 'processData'",
             box(title = "Indicators",
@@ -432,8 +439,9 @@ ui <- dashboardPage(
                     label = "Username",
                     value = "cadnihead"),
                   textInput(inputId = "inputOdkPassword2",
-                    label = "Password"),
-                  textInput(inputId = "inputOdkFormId2",
+                    label = "Password",
+                    value = "kEv-hAB-Arb-6Cn"),
+                  textInput(inputId = "inputOdkFormId2a",
                     label = "Form ID",
                     value = "liberiaCoverage")
                 ),
@@ -441,11 +449,11 @@ ui <- dashboardPage(
                   textInput(inputId = "inputOdkDirectory2",
                     label = "Where is the local ODK directory located?",
                     value = getwd()),
-                  textInput(inputId = "inputOdkFormId2",
+                  textInput(inputId = "inputOdkFormId2b",
                     label = "Form ID",
                     value = "liberiaCoverage")
                 ),
-                conditionalPanel(condition = "input.inputOdkFormId2 == ' '",
+                conditionalPanel(condition = "input.inputOdkFormId2a != ' ' | input.inputOdkFormId2a != ' '",
                   actionButton(inputId = "inputDataAction2",
                     label = "Pull data",
                     icon = icon(name = "arrow-down",
@@ -485,8 +493,9 @@ ui <- dashboardPage(
                       label = "Username",
                       value = "cadnihead"),
                     textInput(inputId = "inputOdkPassword1",
-                      label = "Password"),
-                    textInput(inputId = "inputOdkFormId1",
+                      label = "Password",
+                      value = "kEv-hAB-Arb-6Cn"),
+                    textInput(inputId = "inputOdkFormId1a",
                       label = "Form ID",
                       value = "liberiaVillageForm")
                   ),
@@ -494,11 +503,11 @@ ui <- dashboardPage(
                     textInput(inputId = "inputOdkDirectory1",
                       label = "Where is the local ODK directory located?",
                       value = getwd()),
-                    textInput(inputId = "inputOdkFormId1",
+                    textInput(inputId = "inputOdkFormId1b",
                       label = "Form ID",
                       value = "liberiaVillageForm")
                   ),
-                  conditionalPanel(condition = "input.inputOdkFormId1 == ' '",
+                  conditionalPanel(condition = "input.inputOdkFormId1a != ' ' | input.inputOdkFormId1b != ' '",
                     actionButton(inputId = "inputDataAction1",
                       label = "Pull data",
                       icon = icon(name = "arrow-down", 
@@ -508,7 +517,7 @@ ui <- dashboardPage(
                 )
               )
             ),
-            tabBox(title = "",
+            tabBox(title = "Process",
               id = "process",
               selected = "villageData",
               side = "right",
