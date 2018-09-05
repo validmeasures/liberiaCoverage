@@ -819,7 +819,7 @@ server <- function(input, output, session) {
   output$collectPapi <- renderUI({
     HTML("
       <p>The <strong>Liberia Coverage Survey</strong> can be implemented using paper questionnaires. A copy of the paper questionnaires can be downloaded from the following link:</p>
-      <p><a target='_blank', href='/www/forms/liberiaCoverageSurveyInstrument.pdf'><strong>Download Instrument</strong></a></p>
+      <p><a target='_blank', href='/liberiaCoverage/www/forms/liberiaCoverageSurveyInstrument.pdf'><strong>Download Instrument</strong></a></p>
       <p>When using paper forms, one should use an appropriate data entry client in which to enter the information from the completed paper questionnaires. Possible data entry clients that can be used are:</p>
       <ul>
         <li><a target='_blank', href='http://www.epidata.dk'>EpiData</a></li>
@@ -875,12 +875,8 @@ server <- function(input, output, session) {
     }
   )
   #
-  # Output village data table
   #
-  output$villageDataTable <- DT::renderDataTable(
-    expr = villageData(),
-    options = list(scrollX = TRUE)
-  )
+  #
   observeEvent(input$inputDataAction1, {
     if(!"odkBriefcase_latest.jar" %in% list.files()) {
       get_briefcase(destination = ".")
@@ -918,6 +914,15 @@ server <- function(input, output, session) {
     
     output$villageDataTable <- DT::renderDataTable(
       expr = villageData,
+      options = list(scrollX = TRUE)
+    )
+  })
+  #
+  # Output village data table - upload
+  #
+  observeEvent(input$inputDataRaw1, {
+    output$villageDataTable <- DT::renderDataTable(
+      expr = villageData(),
       options = list(scrollX = TRUE)
     )
   })
