@@ -295,7 +295,6 @@ ui <- dashboardPage(
             id = "design",
             title = "Design",
             width = 8,
-            height = 500,
             side = "right",
             tabPanel(title = "Stage 1",
               value = "stage1",
