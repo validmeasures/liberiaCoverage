@@ -33,7 +33,7 @@ if(!require(leaflet)) install.packages("leaflet")
 if(!require(ggmap)) install.packages("ggmap")
 if(!require(DT)) install.packages("DT")
 
-if(!require(liberia)) install_github("validmeasures/liberia")
+if(!require(liberia)) install_github("validmeasures/oldr")
 if(!require(spatialsampler)) install_github("validmeasures/spatialsampler")
 if(!require(odkr)) install_github("validmeasures/odkr")
 if(!require(zscorer)) install_github("nutriverse/zscorer")
