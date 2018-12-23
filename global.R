@@ -34,9 +34,9 @@ if(!require(ggmap)) install.packages("ggmap")
 if(!require(DT)) install.packages("DT")
 if(!require(DT)) install.packages("zscorer")
 
-if(!require(liberia)) install_github("validmeasures/oldr")
-if(!require(spatialsampler)) install_github("validmeasures/spatialsampler")
+if(!require(liberia)) install_github("validmeasures/liberia")
+if(!require(spatialsampler)) install_github("SpatialWorks/spatialsampler")
 if(!require(odkr)) install_github("validmeasures/odkr")
-if(!require(sampsizer)) install_github("validmeasures/sampsizer")
+if(!require(sampsizer)) install_github("ernestguevarra/sampsizer")
 
 
