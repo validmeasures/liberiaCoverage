@@ -616,10 +616,42 @@ ui <- dashboardPage(
       # Body output when 'report' menu is selected
       #
       tabItem(tabName = "report",
-        box(title = "Report",
-          solidHeader = FALSE,
-          status = "danger",
-          width = 12)
+        fluidRow(
+          tabBox(id = "gm",
+            title = "Report",
+            width = 12,
+            tabPanel(title = "Urban Montserrado",
+              value = "gm",
+              fluidRow(
+                tabBox(id = "ifaGM",
+                  title = "",
+                  width = 12,
+                  tabPanel(title = "IFA",
+                    value = "ifaGM"
+                  ),
+                  tabPanel(title = "IYCF",
+                    value = "iycfGM"
+                  ),
+                  tabPanel(title = "MNP",
+                    value = "mnpGM"
+                  ),
+                  tabPanel(title = "Vitamin A",
+                    value = "vitGM"
+                  ),
+                  tabPanel(title = "Nutrition Screening",
+                    value = "screenGM"
+                  ),
+                  tabPanel(title = "CMAM",
+                    value = "cmamGM"
+                  )
+                )
+              )
+            ),
+            tabPanel(title = "Grand Bassa",
+              value = "gb"
+            )
+          )
+        )
       )
     )
   )
